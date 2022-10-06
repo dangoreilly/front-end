@@ -2,10 +2,15 @@
   "name": "nebb-front-end",
   "version": "1.0.0",
   "description": "NEBB front end",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www"
   },
   "author": "Dan O'Reilly",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "hjs": "^0.0.6",
+    "morgan": "^1.10.0"
+  }
 }
