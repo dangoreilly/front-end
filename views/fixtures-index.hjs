@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>North East Basketball Board</title>
+    <title>NEBB - Fixtures</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="stylesheets/nebb.css" />
@@ -46,71 +46,69 @@
         <div class="container py-4 ">
             <header class="pb-3 mb-4 border-bottom">
                 <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-                    <img src="images/logo.png" width="40" height="32" class="me-2"></img>
+                    <img src="../images/logo.png" width="40" height="32" class="me-2"></img>
                     <span class="fs-4">North East Basketball Board</span>
                 </a>
+                {{!-- <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">Disabled</a>
+                        </li>
+                    </ul> --}}
             </header>
 
             <div class="p-5 mb-4 bg-light rounded-3 splash">
                 <div class="container-fluid py-5">
                     <div class="splash-text">
-                        <h1 class="display-5 fw-bold">North East Basketball Board</h1>
-                        <p class="col-md-8 fs-4">The Official Area Board of the North East of Ireland
+                        <h1 class="display-5 fw-bold">Fixtures</h1>
+                        {{!-- <p class="col-md-8 fs-4">The Official Area Board of the North East of Ireland --}}
                     </div>
                 </div>
             </div>
 
-                    
-
+            
             <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 gy-4">
+                <div class="row row-cols-1 row-cols-sm-3 gy-4">
                     <div class="col">
-                        <div class="h-100 p-5 text-bg-dark rounded-1">
-                            <h2>Welcome</h2>
-                            <p>The North East Basketball Board (NEBB), as recognised by Basketball Ireland, is responsible for the development and promotion of basketball in Cavan, Monaghan, Louth and Meath. The board consists of 1 representative from each our registered clubs, and works to ensure the smooth operations of our Juvenile and Senior Leagues.</p>
-                
+                        <div class="h-100 p-3 text-bg-light border border-dark rounded-3">
+                            <h3 class="fs-2">Girls Juvenile</h3>
+                            <div class="list-group">
+                                {{#leagues.girlsJuvenile}}
+                                <a href="fixtures/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                {{/leagues.girlsJuvenile}}
+                            </div>
                         </div>
                     </div>
+            
                     <div class="col">
-                        <a href="#">
-                            <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
-                                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
-                                    <i class="bi bi-trophy-fill"></i>
-                                </div>
-                                <h3 class="fs-2">League Tables</h3>
-                                <p>Tables for our Juvenile and Senior leagues</p>
-                                {{!-- <button class="btn btn-warning" type="button">Click Here <i class="bi bi-chevron-right"></i></button> --}}
+                        <div class="h-100 p-3 text-bg-light border border-dark rounded-3">
+                            <h3 class="fs-2">Boys Juvenile</h3>
+                            <div class="list-group">
+                                {{#leagues.boysJuvenile}}
+                                <a href="fixtures/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                {{/leagues.boysJuvenile}}
                             </div>
-                        </a>
+                        </div>
                     </div>
+                {{!-- </div> --}}
+                        
                     <div class="col">
-                        <a href="fixtures">
-                            <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-fixtures">
-                                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
-                                    <i class="bi bi-calendar2-x"></i>
-                                </div>
-                                <h3 class="fs-2">Fixtures</h3>
-                                <p>All scheduled games in the current season</p>
-                                {{!-- <button class="btn btn-warning" type="button">Click Here <i class="bi bi-chevron-right"></i></button> --}}
+                        <div class="h-100 p-3 text-bg-light border border-dark rounded-3">
+                            <h3 class="fs-2">Senior</h3>
+                            <div class="list-group">
+                                {{#leagues.senior}}
+                                <a href="fixtures/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                {{/leagues.senior}}
                             </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="#">
-                            <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-downloads">
-                                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-light bg-gradient fs-2 mb-3">
-                                    <i class="bi bi-file-earmark-text-fill"></i>
-                                </div>
-                                <h3 class="fs-2">Downloads</h3>
-                                <p>Rules and forms</p>
-                                {{!-- <button class="btn btn-light" type="button">Click Here <i class="bi bi-chevron-right"></i></button> --}}
-                            </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
 
         <!-- FOOTER -->
         {{!-- <footer class="container">
