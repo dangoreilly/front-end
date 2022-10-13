@@ -51,7 +51,7 @@ router.get('/:league', function(req, res, next) {
 
       let league = req.params.league;
 
-      var fixtures = {
+      let fixtures = {
             "league": "U18 Boys (B)",
             "games": [
                   {
@@ -61,7 +61,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 49,
                         "awayTeam": "Streete Warriors",
                         "awayScore": 58,
-                        "homeWin": homeScore > awayScore ? true :false,
+                        "homeWin": function(){return (this.homeScore > this.awayScore)},
                         "posted": true
 
                   },
@@ -72,7 +72,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 49,
                         "awayTeam": "Dunshaughlin Rockets B",
                         "awayScore": 11,
-                        "homeWin": homeScore > awayScore ? true :false,
+                        "homeWin": function(){return (this.homeScore > this.awayScore)},
                         "posted": true
                   },
                   {
@@ -82,7 +82,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 40,
                         "awayTeam": "Dynamites",
                         "awayScore": 36,
-                        "homeWin": homeScore > awayScore ? true :false,
+                        "homeWin": function(){return (this.homeScore > this.awayScore)},
                         "posted": true
                   },
                   {
@@ -92,7 +92,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 35,
                         "awayTeam": "Drogheda Arctic Wolves",
                         "awayScore": 96,
-                        "homeWin": homeScore > awayScore ? true :false,
+                        "homeWin": function(){return (this.homeScore > this.awayScore)},
                         "posted": true
                   },
                   {
@@ -102,7 +102,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 0,
                         "awayTeam": "Drogheda Wolves",
                         "awayScore": 0,
-                        "homeWin": homeScore > awayScore ? true :false,
+                        "homeWin": function(){return (this.homeScore > this.awayScore)},
                         "posted": false
 
                   },
@@ -141,13 +141,13 @@ passport.use(new BasicStrategy(
       }
 ));
 
-router.get('/:league/edit', 
+router.get('/edit/:league', 
       passport.authenticate('basic', { session: false }),
       function(req, res) {
 
             let league = req.params.league;
 
-            var fixtures = {
+            let fixtures = {
                   "league": "U18 Boys (B)",
                   "games": [
                         {
