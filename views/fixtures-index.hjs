@@ -7,7 +7,7 @@
     <title>NEBB - Fixtures</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="stylesheets/nebb.css" />
+    <link rel="stylesheet" href="/stylesheets/nebb.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
   </head>
@@ -79,7 +79,7 @@
                             <h3 class="fs-2">Girls Juvenile</h3>
                             <div class="list-group">
                                 {{#leagues.girlsJuvenile}}
-                                <a href="fixtures/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                <a href="{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
                                 {{/leagues.girlsJuvenile}}
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             <h3 class="fs-2">Boys Juvenile</h3>
                             <div class="list-group">
                                 {{#leagues.boysJuvenile}}
-                                <a href="fixtures/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                <a href="{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
                                 {{/leagues.boysJuvenile}}
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                             <h3 class="fs-2">Senior</h3>
                             <div class="list-group">
                                 {{#leagues.senior}}
-                                <a href="fixtures/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                <a href="{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
                                 {{/leagues.senior}}
                             </div>
                         </div>
