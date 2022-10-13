@@ -1,0 +1,240 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NEBB - Fixtures</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/fixtures.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <script src="/javascripts/filters.js"></script>
+    
+    <link rel="icon" type="/image/x-icon" href="/images/logo.png">
+
+  </head>
+  <body>
+{{!--     
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Carousel</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header> --}}
+
+    <main>
+
+        <div class="container py-4 ">
+            <header class="pb-3 mb-4 border-bottom">
+                <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                    <img src="/images/logo.png" width="40" height="32" class="me-2"></img>
+                    <span class="fs-4">North East Basketball Board</span>
+                </a>
+                {{!-- <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">Disabled</a>
+                        </li>
+                    </ul> --}}
+            </header>
+
+            <div class="p-5 mb-4 bg-light rounded-3 splash">
+                <div class="container-fluid py-5">
+                    <div class="splash-text">
+                        <h1 class="display-5 fw-bold">Fixtures (Edit mode)</h1>
+                        <p class="col-md-8 fs-4">{{fixtures.league}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 mb-4 bg-light rounded-1">
+
+                <!-- <div>  Filter for the table 
+                    <div class="card card-body mb-1 p-2" style="width: fit-content;">
+                        <div class="form-check form-switch"  role="button" onclick="filterTable()">
+                            <input class="form-check-input"  data-bs-toggle="collapse" href="#checkboxes" type="checkbox" role="switch" id="allTeamsFilterToggle" checked>
+                            <label class="form-check-label" for="allTeamsFilterToggle">All teams</label>
+                        </div>
+                    </div>
+                    <div class="collapse" id="checkboxes">
+                        <div class="card card-body mb-3">
+                        
+                            <div class="row row-cols-1 row-cols-sm-4 gy-1">
+                            {{#fixtures.teams}}
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{.}}" onclick="filterTable()" id="{{.}}">
+                                        <label class="form-check-label" for="{{.}}">
+                                            {{.}}
+                                        </label>
+                                    </div>
+                                </div>
+                            {{/fixtures.teams}}
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <button onclick="sendUpdate()" class="btn btn-outline-warning mb-3" id="submitButton" disabled>Update</button>
+
+                <table class="table table-striped table-hover" style="text-align: center;" id="fixturesTable">
+                    <thead class="table-dark">
+                        <tr>
+                        {{!-- <th scope="col">ID</th> --}}
+                        <th scope="col">Date</th>
+                        <th scope="col">Home Team</th>
+                        <th scope="col">Home<br> Points</th>
+                        <th scope="col">Home<br> Score</th>
+                        <th scope="col">Away Team</th>
+                        <th scope="col">Away<br> Points</th>
+                        <th scope="col">Away<br> Score</th>
+                        <th scope="col">Live</th>
+                        <!-- <th scope="col"></th> -->
+                        </tr>
+                    </thead>
+
+                    <tbody class="table-group-divider">
+                        {{#fixtures.games}}
+                            <tr id="tr_{{id}}"> <!-- If anything is changed, this record will need to be restyled  -->
+                                <!-- The ID for matching the PUT -->
+                                <!-- <td class="table-secondary">{{id}}</td> -->
+                                <input type="hidden" value="{{id}}">
+                                
+                                <!-- Date -->
+                                <td>
+                                    <input oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-control" type="date" style="width: 9rem;" name="gameDate" data-og-value="{{parsedDate}}" value="{{parsedDate}}" id="date_{{id}}">
+                                </td> 
+                                
+                                <!-- Home Team -->
+                                <td>
+                                    <select oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-select" aria-label="Team Select" data-og-value="{{homeTeam}}" id="homeTeam_{{id}}">
+                                        <option selected>{{homeTeam}}</option>
+                                        {{#fixtures.teams}}
+                                            <option value="{{.}}">{{.}}</option>
+                                        {{/fixtures.teams}}
+                                    </select>
+                                </td> 
+                                
+                                <!-- Home Team Points Awarded-->
+                                <td>
+                                    <input oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-control" style="width: 4rem;" type="number" data-og-value="{{homePoints}}" value="{{homePoints}}" id="homePoints_{{id}}">
+                                </td> 
+                                
+                                <!-- Home Team Score -->
+                                <td>
+                                    <input oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-control" style="width: 5rem;" type="number" data-og-value="{{homeScore}}" value="{{homeScore}}" id="homeScore_{{id}}">
+                                </td>
+                                
+                                <!-- Away Team -->
+                                <td>
+                                    <select oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-select" aria-label="Team Select" data-og-value="{{awayTeam}}" id="awayTeam_{{id}}">
+                                        <option selected>{{homeTeam}}</option>
+                                        {{#fixtures.teams}}
+                                            <option value="{{.}}">{{.}}</option>
+                                        {{/fixtures.teams}}
+                                    </select>
+                                </td> 
+                                
+                                <!-- Away Team Points -->
+                                <td>
+                                    <input oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-control" style="width: 4rem;" type="number" data-og-value="{{awayPoints}}" value="{{awayPoints}}" id="awayPoints_{{id}}">
+                                </td>
+                                
+                                <!-- Away Team Score -->
+                                <td>
+                                    <input oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-control" style="width: 5rem;" type="number" data-og-value="{{awayScore}}" value="{{awayScore}}" id="awayScore_{{id}}">
+                                </td>
+                                
+                                <!-- Is the score live -->
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input oninput="preflight({{id}}, this.dataset.ogValue, this.value)" class="form-check-input" type="checkbox" role="switch" id="posted_{{id}}" data-og-value="{{#posted}} checked {{/posted}}" {{#posted}} checked {{/posted}}>
+                                        {{!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> --}}
+                                    </div>
+                                </td>
+                                <!-- Submit button to commit changes -->
+                                <!-- <td> <button type="submit" class="btn btn-outline-warning" id="button_{{id}}" disabled>Update</button></td> -->
+                            </tr>
+                        {{/fixtures.games}}
+                    </tbody>
+                </table>
+            </div>
+            
+
+        <!-- FOOTER -->
+        {{!-- <footer class="container">
+            <p class="float-end"><a href="#">Back to top</a></p>
+            <p>&copy; 2017–2022 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer> --}}
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script>
+        //Function to style a row based on if it's been updated
+        function preflight (id, og_value, curr_value){
+
+            console.log(`Beginning preflight for form_${id}, comparing ${og_value} and ${curr_value}`)
+
+            let row = document.getElementById(`tr_${id}`);
+            //let elem = document.getElementById(el_id.innerText);
+
+            //console.log(elem);
+            //let curr_value = input.value;
+            //let og_value = input.og_value;
+            
+
+            if (og_value != curr_value){
+                row.className = "table-danger";
+                document.getElementById(`submitButton`).disabled = false;
+                document.getElementById(`submitButton`).className = "btn btn-warning mb-3";
+            }
+            
+            /*let form = document.forms[`form_${id}`]
+            let inputs = form.getElementsBy("input");
+
+            let date = document.getElementById(``);
+            let homeTeam": "East Coast Cavaliers",
+            let homeScore": 49,
+            let homePoints": 1,
+            let awayTeam": "Streete Warriors",
+            let awayScore": 58,
+            let awayPoints": 3,
+            let posted": true
+
+            for (i = 0; i > inputs.length; i++){
+                console.log(`${inputs[i].id} ${inputs[i].value}`)
+            }*/
+
+        }
+    </script>
+      
+  </body>
+</html>

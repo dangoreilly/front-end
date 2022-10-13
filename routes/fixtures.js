@@ -1,9 +1,14 @@
 var express = require('express');
 var router = express.Router();
+
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;
 // const axios = require('axios');
 // const dotenv = require('dotenv').config();
 
 // let token = process.env.STRAPI_BEARER;
+let fixturesEditUser = "user";
+let fixturesEditPass = "pass";
 
 // const config = {
 //   headers: { Authorization: `Bearer ${token}` }
@@ -56,7 +61,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 49,
                         "awayTeam": "Streete Warriors",
                         "awayScore": 58,
-                        "homeWin": false,
+                        "homeWin": homeScore > awayScore ? true :false,
                         "posted": true
 
                   },
@@ -67,7 +72,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 49,
                         "awayTeam": "Dunshaughlin Rockets B",
                         "awayScore": 11,
-                        "homeWin": true,
+                        "homeWin": homeScore > awayScore ? true :false,
                         "posted": true
                   },
                   {
@@ -77,7 +82,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 40,
                         "awayTeam": "Dynamites",
                         "awayScore": 36,
-                        "homeWin": true,
+                        "homeWin": homeScore > awayScore ? true :false,
                         "posted": true
                   },
                   {
@@ -87,7 +92,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 35,
                         "awayTeam": "Drogheda Arctic Wolves",
                         "awayScore": 96,
-                        "homeWin": false,
+                        "homeWin": homeScore > awayScore ? true :false,
                         "posted": true
                   },
                   {
@@ -97,7 +102,7 @@ router.get('/:league', function(req, res, next) {
                         "homeScore": 0,
                         "awayTeam": "Drogheda Wolves",
                         "awayScore": 0,
-                        "homeWin": false,
+                        "homeWin": homeScore > awayScore ? true :false,
                         "posted": false
 
                   },
@@ -119,6 +124,130 @@ router.get('/:league', function(req, res, next) {
       // res.render('index');
 
 });
+
+//Temporary dummy user for testing
+// var User = {"username":"user", "password":"pass"}
+
+//Private route for in-place fixture editing
+passport.use(new BasicStrategy(
+      function(userid, password, done) {
+
+            if (userid == fixturesEditUser && password == fixturesEditPass){
+                  return done(null, true);
+            }
+            else {
+                  return done(null, false);
+            }
+      }
+));
+
+router.get('/:league/edit', 
+      passport.authenticate('basic', { session: false }),
+      function(req, res) {
+
+            let league = req.params.league;
+
+            var fixtures = {
+                  "league": "U18 Boys (B)",
+                  "games": [
+                        {
+                              "id":"5",
+                              "date":"02/10/2022",
+                              "parsedDate": function(){
+                                    let parts =this.date.split("/");
+                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
+                              },
+                              // "homeClub": "East Coast Cavaliers",
+                              "homeTeam": "East Coast Cavaliers",
+                              "homeScore": 49,
+                              "homePoints": 1,
+                              "awayTeam": "Streete Warriors",
+                              "awayScore": 58,
+                              "awayPoints": 3,
+                              "posted": true
+      
+                        },
+                        {
+                              "id":"1",
+                              "date":"09/10/2022",
+                              "parsedDate": function(){
+                                    let parts =this.date.split("/");
+                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
+                              },
+                              // "homeClub": "East Coast Cavaliers",
+                              "homeTeam": "East Coast Cavaliers",
+                              "homeScore": 49,
+                              "homePoints": 3,
+                              "awayTeam": "Dunshaughlin Rockets B",
+                              "awayScore": 11,
+                              "awayPoints": 1,
+                              "posted": true
+                        },
+                        {
+                              "id":"2",
+                              "date":"09/10/2022",
+                              "parsedDate": function(){
+                                    let parts =this.date.split("/");
+                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
+                              },
+                              // "homeClub": "East Coast Cavaliers",
+                              "homeTeam": "Blackwater Steelers",
+                              "homeScore": 40,
+                              "homePoints": 3,
+                              "awayTeam": "Dynamites",
+                              "awayScore": 36,
+                              "awayPoints": 1,
+                              "posted": true
+                        },
+                        {
+                              "id":"3",
+                              "date":"01/10/2022",
+                              "parsedDate": function(){
+                                    let parts =this.date.split("/");
+                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
+                              },
+                              // "homeClub": "East Coast Cavaliers",
+                              "homeTeam": "East Cavan Eagles",
+                              "homeScore": 35,
+                              "homePoints": 1,
+                              "awayTeam": "Drogheda Arctic Wolves",
+                              "awayScore": 96,
+                              "awayPoints": 3,
+                              "posted": true
+                        },
+                        {
+                              "id":"4",
+                              "date":"11/10/2022",
+                              "parsedDate": function(){
+                                    let parts =this.date.split("/");
+                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
+                              },
+                              // "homeClub": "East Coast Cavaliers",
+                              "homeTeam": "East Cavan Eagles",
+                              "homeScore": 0,
+                              "homePoints": 0,
+                              "awayTeam": "Drogheda Wolves",
+                              "awayScore": 0,
+                              "awayPoints": 0,
+                              "posted": false
+      
+                        },
+                  ],
+                  "teams": [
+                        "East Cavan Eagles",
+                        "Drogheda Wolves",
+                        "Drogheda Arctic Wolves",
+                        "Dynamites",
+                        "Blackwater Steelers",
+                        "Dunshaughlin Rockets B",
+                        "Streete Warriors",
+                        "East Coast Cavaliers"
+                  ]
+            }
+
+            res.render('fixtures-edit', {fixtures});
+      }
+);
 
 
 module.exports = router;
