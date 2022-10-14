@@ -74,13 +74,13 @@
                         </div>
                     </div>
                     <div class="col">
-                        <a href="#">
+                        <a href="standings">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
                                     <i class="bi bi-trophy-fill"></i>
                                 </div>
-                                <h3 class="fs-2">League Tables</h3>
-                                <p>Tables for our Juvenile and Senior leagues</p>
+                                <h3 class="fs-2">League Standings</h3>
+                                <p>Standings for our Juvenile and Senior leagues</p>
                                 {{!-- <button class="btn btn-warning" type="button">Click Here <i class="bi bi-chevron-right"></i></button> --}}
                             </div>
                         </a>
@@ -98,7 +98,7 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="#">
+                        <a href="downloads">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-downloads">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-light bg-gradient fs-2 mb-3">
                                     <i class="bi bi-file-earmark-text-fill"></i>
