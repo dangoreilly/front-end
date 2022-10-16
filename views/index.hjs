@@ -73,7 +73,7 @@
                 
                         </div>
                     </div>
-                    <div class="col">
+                    {{!-- <div class="col">
                         <a href="standings">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
@@ -81,11 +81,22 @@
                                 </div>
                                 <h3 class="fs-2">League Standings</h3>
                                 <p>Standings for our Juvenile and Senior leagues</p>
-                                {{!-- <button class="btn btn-warning" type="button">Click Here <i class="bi bi-chevron-right"></i></button> --}}
+                            </div>
+                        </a>
+                    </div> --}}
+                    <div class="col">
+                        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQQQG2HkYswteMR1TnnmOHQ1VUKdtPNBu9Y7h4On2BGgQWXVNjcm1gcJtH4M_AgvaVPdOg3tf9VEpj7/pubhtml?gid=1227565498&amp;single=true&amp;widget=true&amp;headers=false">
+                            <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
+                                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
+                                    <i class="bi bi-trophy-fill"></i>
+                                </div>
+                                <h3 class="fs-2">Results</h3>
+                                <p>Results from the start of the season</p>
                             </div>
                         </a>
                     </div>
-                    <div class="col">
+
+                    {{!-- <div class="col">
                         <a href="fixtures">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-fixtures">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
@@ -93,19 +104,17 @@
                                 </div>
                                 <h3 class="fs-2">Fixtures</h3>
                                 <p>All scheduled games in the current season</p>
-                                {{!-- <button class="btn btn-warning" type="button">Click Here <i class="bi bi-chevron-right"></i></button> --}}
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
                     <div class="col">
-                        <a href="downloads">
+                        <a href="https://drive.google.com/drive/folders/15Stgss5kkIdIYnCUpOdDiPMxsO_kQpj0?usp=sharing">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-downloads">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-light bg-gradient fs-2 mb-3">
                                     <i class="bi bi-file-earmark-text-fill"></i>
                                 </div>
                                 <h3 class="fs-2">Downloads</h3>
                                 <p>Rules and forms</p>
-                                {{!-- <button class="btn btn-light" type="button">Click Here <i class="bi bi-chevron-right"></i></button> --}}
                             </div>
                         </a>
                     </div>
