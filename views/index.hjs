@@ -73,8 +73,8 @@
                 
                         </div>
                     </div>
-                    {{!-- <div class="col">
-                        <a href="standings">
+                    <div class="col">
+                        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTPvTXumJHBHY7c5MN8J6wwGsX2n3aNW9MZoWWpMl7wz1cQi0-7UuB5b-Oz1KAfyg/pubhtml">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
                                     <i class="bi bi-trophy-fill"></i>
@@ -83,7 +83,7 @@
                                 <p>Standings for our Juvenile and Senior leagues</p>
                             </div>
                         </a>
-                    </div> --}}
+                    </div>
                     <div class="col">
                         <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQQQG2HkYswteMR1TnnmOHQ1VUKdtPNBu9Y7h4On2BGgQWXVNjcm1gcJtH4M_AgvaVPdOg3tf9VEpj7/pubhtml?gid=1227565498&amp;single=true&amp;widget=true&amp;headers=false">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
