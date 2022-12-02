@@ -45,6 +45,10 @@ router.get('/scoresheets', function(req, res, next) {
       res.redirect('https://docs.google.com/forms/d/e/1FAIpQLSfPyJvJvi7ptXu0i9iRAYqG9OxLaaaovvYWkBz0_GK9tp9NGQ/viewform?usp=sf_link');
 });
 
+router.get('/knights', function(req, res, next) {
+      res.render('knights');
+});
+
 
 
 
