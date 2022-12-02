@@ -117,8 +117,13 @@ a:active { text-decoration: none; color: #000000;}
     background-image: linear-gradient(to bottom right, #EC9192, #db5375);
     
 }
-    
 
+#card-knights{
+    /* background-image: linear-gradient(to bottom right, #f7c548, #A98743); */
+    background-image: linear-gradient(to bottom right, #82C4C2, #92AADD);
+    
+}
+    
 
 #card-downloads{
     background-image: linear-gradient(to bottom right, #7389ae, #416788);
