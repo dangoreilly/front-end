@@ -85,12 +85,12 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQKGtVzMtM_mYYe8aLWjmWwRrC3A3uXHmrI2RGGoeKkihtRvOFAJMpbO6a9lJYb_xBvCtCezpxhq_Aw/pubhtml">
+                        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRBWA3TdlcVPpLDK5NH9VU_HkcqyU8xQhv_3bfL6J1WbN43PLzRZLkLyvt6K5lavw/pubhtml">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-fixtures">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
                                     <i class="bi bi-trophy-fill"></i>
                                 </div>
-                                <h3 class="fs-2">Fixtures</h3>
+                                <h3 class="fs-2">Fixtures & Results</h3>
                                 <p>Fixtures Spreadsheet for the 22/23 season</p>
                             </div>
                         </a>
