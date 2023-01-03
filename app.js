@@ -5,7 +5,7 @@ var path = require('path');
 var logger = require('morgan');
 const passport = require('passport');  // authentication
 const bodyParser = require('body-parser'); // parser middleware
-const axious = require('axios'); // parser middleware
+const axios = require('axios'); // parser middleware
 
 const dotenv = require('dotenv').config();
 
