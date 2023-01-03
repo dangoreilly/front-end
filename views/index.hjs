@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="stylesheets/nebb.css" />
 
     <!-- Plausible analytics -->
-    <script defer data-domain="nebb.ie" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="nebb.ie" src="https://plausible.io/js/script.outbound-links.js"></script>
 
 
   </head>
