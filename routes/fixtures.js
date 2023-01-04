@@ -3,12 +3,14 @@ var router = express.Router();
 
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
-// const axios = require('axios');
-// const dotenv = require('dotenv').config();
+const axios = require('axios');
+const { resource } = require('../app');
+const dotenv = require('dotenv').config();
 
-// let token = process.env.STRAPI_BEARER;
-let fixturesEditUser = "user";
-let fixturesEditPass = "pass";
+let token = process.env.STRAPI_BEARER;
+let fixturesEditUser = "user"; //process.env.FIXTURES_EDIT_USER;
+let fixturesEditPass = "pass";//process.env.FIXTURES_EDIT_PASS;
+let auth_path = process.env.STRAPI + "api/auth/local";
 
 // const config = {
 //   headers: { Authorization: `Bearer ${token}` }
@@ -49,9 +51,9 @@ router.get('/', function(req, res, next) {
 
 router.get('/:league', function(req, res, next) {
 
-      let league = req.params.league;
+      let leagueURL = req.params.league;
 
-      let fixtures = {
+      let __fixtures = {
             "league": "U18 Boys (B)",
             "games": [
                   {
@@ -119,9 +121,28 @@ router.get('/:league', function(req, res, next) {
             ]
       }
 
+      let _fixtures = Promise.resolve(getFixtures(leagueURL));
+      let _teams = Promise.resolve(getTeams(leagueURL));
 
-      res.render('fixtures', {fixtures});
+      // fixtures.then((_fix) => {
+      //       // console.log("fixtures:")
+      //       console.log(_fix);
+
+      //       res.render('fixtures', {_fixtures});
+      // });
       // res.render('index');
+
+      Promise.all([_fixtures, _teams]).then((resolvedPromises) =>{
+            let f = resolvedPromises[0];
+            let t = resolvedPromises[1];
+
+            let fixtures = {
+                  "league": f.league,
+                  "games": f.games,
+                  "teams": t
+            }
+            res.render('fixtures', {fixtures});
+      });
 
 });
 
@@ -132,12 +153,33 @@ router.get('/:league', function(req, res, next) {
 passport.use(new BasicStrategy(
       function(userid, password, done) {
 
-            if (userid == fixturesEditUser && password == fixturesEditPass){
-                  return done(null, true);
-            }
-            else {
+            // If we're in a dev enviroment, can just skip auth
+            // Unless Auth is thing being developed, ofc
+            // if (req.app.get('env') === 'development')
+            //       return done(null, true);
+
+            // If Auth is thing being developed, then hardcode some credentials to save effort
+            // of typing them in every time
+            _userid = "fixtures@nebb.ie";
+            _password = "password1";
+
+            //Otherwise, talk to Strapi and see if this user is allowed see this screen
+            axios
+            .post(auth_path, {
+            "identifier": _userid,
+            "password": _password,
+            })
+            .then(response => {
+                  // Handle success.
+                  // Return to the router the JWT (as 'user' string) 
+                  return done(null, response.data.jwt);
+            })
+            .catch(error => {
+                  // Handle error.
+                  // No need to be graceful, this isn't public facing
                   return done(null, false);
-            }
+            });
+
       }
 ));
 
@@ -146,6 +188,8 @@ router.get('/edit/:league',
       function(req, res) {
 
             let league = req.params.league;
+            let user_jwt = req.user;
+            
 
             let fixtures = {
                   "league": "U18 Boys (B)",
@@ -245,9 +289,118 @@ router.get('/edit/:league',
                   ]
             }
 
-            res.render('fixtures-edit', {fixtures});
+            res.render('fixtures-edit', {fixtures, user_jwt});
       }
 );
+
+async function getTeams(leagueURL){
+      // Function that sends a GET request to the server
+      // GETs all Teams related to leagueURL
+      // Returns array of all matching teams, and 'Success' flag
+      // Success = true if array size is greater than 0
+
+      let requestAddress =  process.env.STRAPI + `api/leagues?filters[url][$eq]=${leagueURL}&populate[teams]=*`
+
+      try{
+            // Use the requestAddress to get team list from CMS
+            var response = await axios.get(requestAddress);
+
+            // Set up empty array to hold the processed fixtures
+            // We want to transform the data from the CMS to make it a bit cleaner first
+            let teams = [];
+            let _teams = response.data.data[0].attributes.teams;
+
+            _team.forEach(element => {
+
+                  let attribs = element.attributes;
+
+                  let teamName = attribs.Name;
+
+                  teams.push(teamName);
+                  
+            });
+
+            // Return an object with both games and the league name to be consumed by the view engine
+            return responseObject= {
+                  "teams": teams,
+                  "success": teams.length > 0
+            };
+      }
+      catch(error) {
+            // handle error
+            console.error(error);
+            //Return an object indicating a failure
+            return {"success": false};
+      }
+}
+
+async function getFixtures(leagueURL){
+      // Function that sends a GET request to the server
+      // GETs all fixtures related to leagueURL
+      // Returns object of all matching fixtures, league name, and 'Success' flag
+      // Success = true if array size is greater than 0
+
+      let requestAddress =  process.env.STRAPI + `api/fixtures?filters[league][url][$eq]=${leagueURL}&populate=*&pagination[pageSize]=100&sort=Date%3Adesc`
+      // console.log(requestAddress)
+
+      try{
+            // Use the requestAddress to get fixtures list from CMS
+            var response = await axios.get(requestAddress);
+            
+            // Set up empty array to hold the processed fixtures
+            // We want to transform the data from the CMS to make it a bit cleaner first
+            let fixtures = [];
+            let _fixtures = response.data.data;
+            // console.log(_fixtures[0]);
+            
+            //Use the first fixture to grab the name of the league
+            let leagueName = _fixtures[0].attributes.league.data.attributes.name;
+            // console.log(leagueName);
+
+            _fixtures.forEach(element => {
+
+                  let attribs = element.attributes;
+
+                  let fixtureInfo = 
+                  {
+                        "id":element.id,
+                        "date":attribs.Date,
+                        // "parsedDate": function(){
+                        //       let parts =this.date.split("/");
+                        //       return `${parts[2]}-${parts[1]}-${parts[0]}`
+                        // },
+                        // "homeClub": "East Coast Cavaliers",
+                        "homeTeam": attribs.team.data.attributes.Name,
+                        "homeScore": attribs.homeTeamScore || "-",
+                        "homePoints": attribs.homeTeamPointsAwarded || "-",
+                        "awayTeam": attribs.awayTeam.data.attributes.Name,
+                        "awayScore": attribs.awayTeamScore || "-",
+                        "awayPoints": attribs.awayTeamPointsAwarded || "-",
+                        "posted": attribs.posted
+                  }
+                  // console.log(fixtureInfo);
+
+                  fixtures.push(fixtureInfo);
+                  
+            });
+
+            // Return an object with both games and the league name to be consumed by the view engine
+            return responseObject= {
+                  "league": leagueName,
+                  "games": fixtures,
+                  "success": fixtures.length > 0
+            };
+                  
+
+            
+      }
+      catch(error) {
+            // handle error
+            console.error(error);
+            //Return an object indicating a failure
+            return {"success": false};
+      }
+}
 
 
 module.exports = router;
