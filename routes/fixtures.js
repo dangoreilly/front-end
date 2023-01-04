@@ -293,6 +293,16 @@ router.get('/edit/:league',
       }
 );
 
+function parseDate(_date){
+      //Takes in a date string in the format YYYY-MM-DD
+      //Returns date string in the format DD/MM/YYYY
+
+      let parts =_date.split("-");
+      
+      return `${parts[2]}/${parts[1]}/${parts[0]}`
+
+}
+
 async function getTeams(leagueURL){
       // Function that sends a GET request to the server
       // GETs all Teams related to leagueURL
@@ -340,7 +350,7 @@ async function getFixtures(leagueURL){
       // Returns object of all matching fixtures, league name, and 'Success' flag
       // Success = true if array size is greater than 0
 
-      let requestAddress =  process.env.STRAPI + `api/fixtures?filters[league][url][$eq]=${leagueURL}&populate=*&pagination[pageSize]=100&sort=Date%3Adesc`
+      let requestAddress =  process.env.STRAPI + `api/fixtures?filters[league][url][$eq]=${leagueURL}&populate=*&pagination[pageSize]=100&sort=Date%3Aasc`
       // console.log(requestAddress)
 
       try{
@@ -364,7 +374,7 @@ async function getFixtures(leagueURL){
                   let fixtureInfo = 
                   {
                         "id":element.id,
-                        "date":attribs.Date,
+                        "date":parseDate(attribs.Date),
                         // "parsedDate": function(){
                         //       let parts =this.date.split("/");
                         //       return `${parts[2]}-${parts[1]}-${parts[0]}`
