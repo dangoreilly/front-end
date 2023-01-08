@@ -187,11 +187,11 @@ router.get('/edit/:league',
       passport.authenticate('basic', { session: false }),
       function(req, res) {
 
-            let league = req.params.league;
+            let leagueURL = req.params.league;
             let user_jwt = req.user;
             
 
-            let fixtures = {
+            let __fixtures = {
                   "league": "U18 Boys (B)",
                   "games": [
                         {
@@ -289,7 +289,37 @@ router.get('/edit/:league',
                   ]
             }
 
-            res.render('fixtures-edit', {fixtures, user_jwt});
+            // Define the fixtures object as a promise due to the async axios call
+            let _fixtures = Promise.resolve(getFixtures(leagueURL));
+
+            // When promise has been resolved, use that data to render the page
+            Promise.all([_fixtures]).then((resolvedPromises) =>{
+                  // Doesn't really need to be an array like this 
+                  // But it makes it easier to refactor later if needed
+                  // And it doesn't really matter if I never do
+
+                  let f = resolvedPromises[0];
+                  // Make sure the request was actually successful
+                  if (f.success){
+                        
+                        // let t = resolvedPromises[1];
+
+                        let fixtures = {
+                              "league": f.league,
+                              "games": f.games,
+                              // "teams": t
+                        }
+                        // console.log(fixtures);
+
+                  
+                        res.render('fixtures-edit', {fixtures, user_jwt});
+                  }
+                  else{
+                        res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
+                  }
+            });
+
+            
       }
 );
 
@@ -338,7 +368,7 @@ async function getTeams(leagueURL){
       }
       catch(error) {
             // handle error
-            console.error(error);
+            // console.error(error);
             //Return an object indicating a failure
             return {"success": false};
       }
