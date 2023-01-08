@@ -74,7 +74,21 @@
                 </div>
             </div>
 
+            <nav class="navbar navbar-text bg-light rounded-1">
+                <div class="container border-3 border-dark">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../">Home</a></li>
+                            <li class="breadcrumb-item"><a href="./">Fixtures</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{fixtures.league}}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </nav>
+
             <div class="p-2 mb-4 bg-light rounded-1">
+                
+                
 
                 <p>Fixtures for the {{fixtures.league}} league are listed below. Winners and their score have been highlighted </p>
                 <p>Please note that it can take up to a week from a game being played to its scoresheet being processed. 
