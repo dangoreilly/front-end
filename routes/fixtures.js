@@ -12,142 +12,211 @@ let fixturesEditUser = "user"; //process.env.FIXTURES_EDIT_USER;
 let fixturesEditPass = "pass";//process.env.FIXTURES_EDIT_PASS;
 let auth_path = process.env.STRAPI + "api/auth/local";
 
+
+//////////////////////////////////
+//For testing rendering
+let test_fixtures = {
+      "league": "U18 Boys (B)",
+      "games": [
+            {
+                  "date":"02/10/2022",
+                  // "homeClub": "East Coast Cavaliers",
+                  "homeTeam": "East Coast Cavaliers",
+                  "homeScore": 49,
+                  "awayTeam": "Streete Warriors",
+                  "awayScore": 58,
+                  "homeWin": function(){return (this.homeScore > this.awayScore)},
+                  "posted": true
+
+            },
+            {
+                  "date":"09/10/2022",
+                  // "homeClub": "East Coast Cavaliers",
+                  "homeTeam": "East Coast Cavaliers",
+                  "homeScore": 49,
+                  "awayTeam": "Dunshaughlin Rockets B",
+                  "awayScore": 11,
+                  "homeWin": function(){return (this.homeScore > this.awayScore)},
+                  "posted": true
+            },
+            {
+                  "date":"09/10/2022",
+                  // "homeClub": "East Coast Cavaliers",
+                  "homeTeam": "Blackwater Steelers",
+                  "homeScore": 40,
+                  "awayTeam": "Dynamites",
+                  "awayScore": 36,
+                  "homeWin": function(){return (this.homeScore > this.awayScore)},
+                  "posted": true
+            },
+            {
+                  "date":"01/10/2022",
+                  // "homeClub": "East Coast Cavaliers",
+                  "homeTeam": "East Cavan Eagles",
+                  "homeScore": 35,
+                  "awayTeam": "Drogheda Arctic Wolves",
+                  "awayScore": 96,
+                  "homeWin": function(){return (this.homeScore > this.awayScore)},
+                  "posted": true
+            },
+            {
+                  "date":"11/10/2022",
+                  // "homeClub": "East Coast Cavaliers",
+                  "homeTeam": "East Cavan Eagles",
+                  "homeScore": 0,
+                  "awayTeam": "Drogheda Wolves",
+                  "awayScore": 0,
+                  "homeWin": function(){return (this.homeScore > this.awayScore)},
+                  "posted": false
+
+            },
+      ],
+      "teams": [
+            "East Cavan Eagles",
+            "Drogheda Wolves",
+            "Drogheda Arctic Wolves",
+            "Dynamites",
+            "Blackwater Steelers",
+            "Dunshaughlin Rockets B",
+            "Streete Warriors",
+            "East Coast Cavaliers"
+      ]
+}
+var test_leagues = {
+      "boysJuvenile":[            
+            {"name":"U12 Boys (A)", "id":"u12-boys-a"},
+            {"name":"U12 Boys (B)", "id":"u12-boys-b"},
+            {"name":"U14 Boys (A)", "id":"u14-boys-a"},
+            {"name":"U14 Boys (B)", "id":"u14-boys-b"},
+            {"name":"U16 Boys (A)", "id":"u16-boys-a"},
+            {"name":"U16 Boys (B)", "id":"u16-boys-b"},
+            {"name":"U18 Boys (A)", "id":"u18-boys-a"},
+            {"name":"U18 Boys (B)", "id":"u18-boys-b"}
+      ],
+      "girlsJuvenile":[            
+            {"name":"U12 Girls (A)", "id":"u12-girls-a"},
+            {"name":"U12 Girls (B)", "id":"u12-girls-b"},
+            {"name":"U14 Girls (A)", "id":"u14-girls-a"},
+            {"name":"U14 Girls (B)", "id":"u14-girls-b"},
+            {"name":"U16 Girls (A)", "id":"u16-girls-a"},
+            {"name":"U16 Girls (B)", "id":"u16-girls-b"},
+            {"name":"U18 Girls (A)", "id":"u18-girls-a"},
+            {"name":"U18 Girls (B)", "id":"u18-girls-b"},
+      ],
+      "senior":[            
+            {"name":"Senior Ladies", "id":"senior-ladies"},
+            {"name":"Senior Mens", "id":"senior-mens"},
+            {"name":"Ladies Masters", "id":"ladies-masters"},
+            {"name":"Mens Masters", "id":"mens-masters"}
+      ]
+};
+//////////////////////////////////
+
 // const config = {
 //   headers: { Authorization: `Bearer ${token}` }
 // };
 
 router.get('/', function(req, res, next) {
-      var leagues = {
-            "boysJuvenile":[            
-                  {"name":"U12 Boys (A)", "id":"u12-boys-a"},
-                  {"name":"U12 Boys (B)", "id":"u12-boys-b"},
-                  {"name":"U14 Boys (A)", "id":"u14-boys-a"},
-                  {"name":"U14 Boys (B)", "id":"u14-boys-b"},
-                  {"name":"U16 Boys (A)", "id":"u16-boys-a"},
-                  {"name":"U16 Boys (B)", "id":"u16-boys-b"},
-                  {"name":"U18 Boys (A)", "id":"u18-boys-a"},
-                  {"name":"U18 Boys (B)", "id":"u18-boys-b"}
-            ],
-            "girlsJuvenile":[            
-                  {"name":"U12 Girls (A)", "id":"u12-girls-a"},
-                  {"name":"U12 Girls (B)", "id":"u12-girls-b"},
-                  {"name":"U14 Girls (A)", "id":"u14-girls-a"},
-                  {"name":"U14 Girls (B)", "id":"u14-girls-b"},
-                  {"name":"U16 Girls (A)", "id":"u16-girls-a"},
-                  {"name":"U16 Girls (B)", "id":"u16-girls-b"},
-                  {"name":"U18 Girls (A)", "id":"u18-girls-a"},
-                  {"name":"U18 Girls (B)", "id":"u18-girls-b"},
-            ],
-            "senior":[            
-                  {"name":"Senior Ladies", "id":"senior-ladies"},
-                  {"name":"Senior Mens", "id":"senior-mens"},
-                  {"name":"Ladies Masters", "id":"ladies-masters"},
-                  {"name":"Mens Masters", "id":"mens-masters"}
-            ]
-      };
+      
+      //TODO: Function for async league pull
 
-      res.render('fixtures-index', {leagues}); 
+      res.render('fixtures-index', {test_leagues}); 
 });
 
 router.get('/:league', function(req, res, next) {
 
       let leagueURL = req.params.league;
 
-      let __fixtures = {
-            "league": "U18 Boys (B)",
-            "games": [
-                  {
-                        "date":"02/10/2022",
-                        // "homeClub": "East Coast Cavaliers",
-                        "homeTeam": "East Coast Cavaliers",
-                        "homeScore": 49,
-                        "awayTeam": "Streete Warriors",
-                        "awayScore": 58,
-                        "homeWin": function(){return (this.homeScore > this.awayScore)},
-                        "posted": true
 
-                  },
-                  {
-                        "date":"09/10/2022",
-                        // "homeClub": "East Coast Cavaliers",
-                        "homeTeam": "East Coast Cavaliers",
-                        "homeScore": 49,
-                        "awayTeam": "Dunshaughlin Rockets B",
-                        "awayScore": 11,
-                        "homeWin": function(){return (this.homeScore > this.awayScore)},
-                        "posted": true
-                  },
-                  {
-                        "date":"09/10/2022",
-                        // "homeClub": "East Coast Cavaliers",
-                        "homeTeam": "Blackwater Steelers",
-                        "homeScore": 40,
-                        "awayTeam": "Dynamites",
-                        "awayScore": 36,
-                        "homeWin": function(){return (this.homeScore > this.awayScore)},
-                        "posted": true
-                  },
-                  {
-                        "date":"01/10/2022",
-                        // "homeClub": "East Coast Cavaliers",
-                        "homeTeam": "East Cavan Eagles",
-                        "homeScore": 35,
-                        "awayTeam": "Drogheda Arctic Wolves",
-                        "awayScore": 96,
-                        "homeWin": function(){return (this.homeScore > this.awayScore)},
-                        "posted": true
-                  },
-                  {
-                        "date":"11/10/2022",
-                        // "homeClub": "East Coast Cavaliers",
-                        "homeTeam": "East Cavan Eagles",
-                        "homeScore": 0,
-                        "awayTeam": "Drogheda Wolves",
-                        "awayScore": 0,
-                        "homeWin": function(){return (this.homeScore > this.awayScore)},
-                        "posted": false
-
-                  },
-            ],
-            "teams": [
-                  "East Cavan Eagles",
-                  "Drogheda Wolves",
-                  "Drogheda Arctic Wolves",
-                  "Dynamites",
-                  "Blackwater Steelers",
-                  "Dunshaughlin Rockets B",
-                  "Streete Warriors",
-                  "East Coast Cavaliers"
-            ]
-      }
+ 
 
       let _fixtures = Promise.resolve(getFixtures(leagueURL));
       let _teams = Promise.resolve(getTeams(leagueURL));
 
-      // fixtures.then((_fix) => {
-      //       // console.log("fixtures:")
-      //       console.log(_fix);
-
-      //       res.render('fixtures', {_fixtures});
-      // });
-      // res.render('index');
-
       Promise.all([_fixtures, _teams]).then((resolvedPromises) =>{
             let f = resolvedPromises[0];
             let t = resolvedPromises[1];
+            
+            if (f.success && t.success){
 
-            let fixtures = {
-                  "league": f.league,
-                  "games": f.games,
-                  "teams": t
+                  // If we have both a list of clubs matched to teams 
+                  // and a list of games w/ the teams, we can match them for rendering later 
+                  let games = matchClubsAndTeams(f.games, t.teams);
+
+                  let fixtures = {
+                        "league": f.league,
+                        "games": games,
+                        "teams": t.teams
+                  }
+
+                  res.render('fixtures', {fixtures});
+
             }
-            res.render('fixtures', {fixtures});
+            else{
+                  res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
+            }
       });
 
 });
 
-//Temporary dummy user for testing
-// var User = {"username":"user", "password":"pass"}
+function matchClubsAndTeams(fixtures, teams){
+      //INPUT
+      // fixtures: array of fixture objects, with <homeTeam and <awayTeam> properties
+      // teams: array of {team, club} objects
+      
+      //METHOD
+      // For each fixture in <fixtures>, matches the home and away team names with a club.
+      // Popluates a new <league> array that replaces the home and away teams with
+      // {team, club} objects
+ 
+      //OUTPUT
+      // <league> object
+
+      let league = [];
+
+      fixtures.forEach(fixture => {
+
+            //Don't mutate the original
+            let f = Object.create(fixture);
+
+            f.homeTeam = getClubForTeam(f.homeTeam, teams);
+            f.awayTeam = getClubForTeam(f.awayTeam, teams);
+
+            league.push(f);
+
+      })
+
+      return league;
+
+
+}
+
+function getClubForTeam(searchTeam, teams){
+      //INPUT
+      // searchTeam: string
+      // teams: array of {team, club} objects
+      
+      //METHOD
+      // loop through <teams> for a match
+ 
+      //OUTPUT
+      // {team, club} object
+
+
+      //If no match is found, just call the club unknown
+      let searchResult = {"teamName": searchTeam, "clubName": "unknown"};;
+
+      teams.forEach(t => {
+
+            if (t.teamName == searchTeam){
+                  searchResult = t;
+            }
+
+      })
+
+      return searchResult;
+}
+
 
 //Private route for in-place fixture editing
 passport.use(new BasicStrategy(
@@ -189,105 +258,6 @@ router.get('/edit/:league',
 
             let leagueURL = req.params.league;
             let user_jwt = req.user;
-            
-
-            let __fixtures = {
-                  "league": "U18 Boys (B)",
-                  "games": [
-                        {
-                              "id":"5",
-                              "date":"02/10/2022",
-                              "parsedDate": function(){
-                                    let parts =this.date.split("/");
-                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
-                              },
-                              // "homeClub": "East Coast Cavaliers",
-                              "homeTeam": "East Coast Cavaliers",
-                              "homeScore": 49,
-                              "homePoints": 1,
-                              "awayTeam": "Streete Warriors",
-                              "awayScore": 58,
-                              "awayPoints": 3,
-                              "posted": true
-      
-                        },
-                        {
-                              "id":"1",
-                              "date":"09/10/2022",
-                              "parsedDate": function(){
-                                    let parts =this.date.split("/");
-                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
-                              },
-                              // "homeClub": "East Coast Cavaliers",
-                              "homeTeam": "East Coast Cavaliers",
-                              "homeScore": 49,
-                              "homePoints": 3,
-                              "awayTeam": "Dunshaughlin Rockets B",
-                              "awayScore": 11,
-                              "awayPoints": 1,
-                              "posted": true
-                        },
-                        {
-                              "id":"2",
-                              "date":"09/10/2022",
-                              "parsedDate": function(){
-                                    let parts =this.date.split("/");
-                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
-                              },
-                              // "homeClub": "East Coast Cavaliers",
-                              "homeTeam": "Blackwater Steelers",
-                              "homeScore": 40,
-                              "homePoints": 3,
-                              "awayTeam": "Dynamites",
-                              "awayScore": 36,
-                              "awayPoints": 1,
-                              "posted": true
-                        },
-                        {
-                              "id":"3",
-                              "date":"01/10/2022",
-                              "parsedDate": function(){
-                                    let parts =this.date.split("/");
-                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
-                              },
-                              // "homeClub": "East Coast Cavaliers",
-                              "homeTeam": "East Cavan Eagles",
-                              "homeScore": 35,
-                              "homePoints": 1,
-                              "awayTeam": "Drogheda Arctic Wolves",
-                              "awayScore": 96,
-                              "awayPoints": 3,
-                              "posted": true
-                        },
-                        {
-                              "id":"4",
-                              "date":"11/10/2022",
-                              "parsedDate": function(){
-                                    let parts =this.date.split("/");
-                                    return `${parts[2]}-${parts[1]}-${parts[0]}`
-                              },
-                              // "homeClub": "East Coast Cavaliers",
-                              "homeTeam": "East Cavan Eagles",
-                              "homeScore": 0,
-                              "homePoints": 0,
-                              "awayTeam": "Drogheda Wolves",
-                              "awayScore": 0,
-                              "awayPoints": 0,
-                              "posted": false
-      
-                        },
-                  ],
-                  "teams": [
-                        "East Cavan Eagles",
-                        "Drogheda Wolves",
-                        "Drogheda Arctic Wolves",
-                        "Dynamites",
-                        "Blackwater Steelers",
-                        "Dunshaughlin Rockets B",
-                        "Streete Warriors",
-                        "East Coast Cavaliers"
-                  ]
-            }
 
             // Define the fixtures object as a promise due to the async axios call
             let _fixtures = Promise.resolve(getFixtures(leagueURL));
@@ -311,8 +281,9 @@ router.get('/edit/:league',
                         }
                         // console.log(fixtures);
 
-                  
-                        res.render('fixtures-edit', {fixtures, user_jwt});
+                        //Expires after 60 mins from the time it is set.
+                        res.cookie("jwt_token", user_jwt, {expire: 3.6e+6 + Date.now()});
+                        res.render('fixtures-edit', {fixtures});
                   }
                   else{
                         res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
@@ -339,26 +310,33 @@ async function getTeams(leagueURL){
       // Returns array of all matching teams, and 'Success' flag
       // Success = true if array size is greater than 0
 
-      let requestAddress =  process.env.STRAPI + `api/leagues?filters[url][$eq]=${leagueURL}&populate[teams]=*`
+      // FILTER: for the league with the matching URL
+      // POPULATE[TEAMS]: Include data about the related teams
+      // POPULATE[1]=CLUB: For each team, include data about the related club
+      let requestAddress =  process.env.STRAPI + `api/leagues?filters[url][$eq]=${leagueURL}&populate[teams][populate][1]=club`
 
       try{
             // Use the requestAddress to get team list from CMS
             var response = await axios.get(requestAddress);
 
-            // Set up empty array to hold the processed fixtures
+            // Set up empty array to hold the processed teams
             // We want to transform the data from the CMS to make it a bit cleaner first
             let teams = [];
-            let _teams = response.data.data[0].attributes.teams;
+            let _teams = response.data.data[0].attributes.teams.data;
 
-            _team.forEach(element => {
+            _teams.forEach(element => {
 
                   let attribs = element.attributes;
 
                   let teamName = attribs.Name;
+                  let clubName = attribs.club.data.attributes.Name;
 
-                  teams.push(teamName);
+                  //Pair the teamName and ClubName into an objectm and add to the list
+                  teams.push({teamName, clubName});
                   
             });
+
+            // console.log(teams);
 
             // Return an object with both games and the league name to be consumed by the view engine
             return responseObject= {
@@ -368,7 +346,7 @@ async function getTeams(leagueURL){
       }
       catch(error) {
             // handle error
-            // console.error(error);
+            console.error(error);
             //Return an object indicating a failure
             return {"success": false};
       }

@@ -90,9 +90,9 @@
                 
                 
 
-                <p>Fixtures for the {{fixtures.league}} league are listed below. Winners and their score have been highlighted </p>
+                <p>Fixtures for the {{fixtures.league}} league are listed below. Winners and their score have been highlighted</p>
                 <p>Please note that it can take up to a week from a game being played to its scoresheet being processed. 
-                    To see the total points awarded for these games, check the <a href="..standings/{{standings.leagueID}}">standings page</a></p>
+                    To see the total points awarded for these games, check the <a href="..standings/{{fixtures.league}}">standings page</a></p>
 
                 <div> <!-- Filter for the table -->
                     <div class="card card-body mb-1 p-2" style="width: fit-content;">
@@ -108,9 +108,9 @@
                             {{#fixtures.teams}}
                                 <div class="col">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="{{.}}" onclick="filterTable()" id="{{.}}">
-                                        <label class="form-check-label" for="{{.}}">
-                                            {{.}}
+                                        <input class="form-check-input" type="checkbox" value="{{teamName}}" onclick="filterTable()" id="{{teamName}}">
+                                        <label class="form-check-label" for="{{teamName}}" title="{{clubName}}">
+                                            {{teamName}}
                                         </label>
                                     </div>
                                 </div>
@@ -137,16 +137,16 @@
                         <td>{{date}}</td>
                         {{!-- Is this a posted score? In that case format it --}}
                         {{#posted}}
-                            <td {{#homeWin}}class="table-success" style="font-weight: bold;"{{/homeWin}}>{{homeTeam}}</td>
+                            <td {{#homeWin}}class="table-success" style="font-weight: bold;"{{/homeWin}} title="{{homeTeam.clubName}}">{{homeTeam.teamName}}</td>
                                 <td><span class="badge  text-bg-{{#homeWin}}success{{/homeWin}}{{^homeWin}}secondary{{/homeWin}}">{{homeScore}}</span>
                                 <span class="badge  text-bg-{{#homeWin}}secondary{{/homeWin}}{{^homeWin}}success{{/homeWin}}">{{awayScore}}</span></td>
-                            <td {{^homeWin}}class="table-success" style="font-weight: bold;"{{/homeWin}}>{{awayTeam}}</td>
+                            <td {{^homeWin}}class="table-success" style="font-weight: bold;"{{/homeWin}} title="{{awayTeam.clubName}}">{{awayTeam.teamName}}</td>
                         {{/posted}}
                         {{!-- Not a posted score? No need to format --}}
                         {{^posted}}
-                            <td>{{homeTeam}}</td>
+                            <td>{{homeTeam.teamName}}</td>
                             <td>-</td>
-                            <td>{{awayTeam}}</td>
+                            <td>{{awayTeam.teamName}}</td>
                         {{/posted}}
                         </tr>
                         {{/fixtures.games}}
