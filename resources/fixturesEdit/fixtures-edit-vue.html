@@ -1,0 +1,451 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NEBB - Fixtures edit</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/fixtures.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <script src="/javascripts/filters.js"></script>
+    <script src="/javascripts/fixtures.js"></script>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+
+
+  </head>
+  <body>
+
+    <main id="app">
+
+        <div class="container py-4 ">
+            <header class="pb-3 mb-4 border-bottom">
+                <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                    <img src="/images/logo.png" width="40" height="32" class="me-2"></img>
+                    <span class="fs-4">North East Basketball Board</span>
+                </a>
+
+            </header>
+
+            <div class="p-5 mb-4 bg-light rounded-3 splash">
+                <div class="container-fluid py-5">
+                    <div class="splash-text">
+                        <h1 class="display-5 fw-bold">Fixtures (Edit mode)</h1>
+                        <p class="col-md-8 fs-4">{{league}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 mb-4 bg-light rounded-1">
+
+                <!-- <div>  Filter for the table 
+                    <div class="card card-body mb-1 p-2" style="width: fit-content;">
+                        <div class="form-check form-switch"  role="button" onclick="filterTable()">
+                            <input class="form-check-input"  data-bs-toggle="collapse" href="#checkboxes" type="checkbox" role="switch" id="allTeamsFilterToggle" checked>
+                            <label class="form-check-label" for="allTeamsFilterToggle">All teams</label>
+                        </div>
+                    </div>
+                    <div class="collapse" id="checkboxes">
+                        <div class="card card-body mb-3">
+                        
+                            <div class="row row-cols-1 row-cols-sm-4 gy-1">
+                            {{#fixtures.teams}}
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{.}}" onclick="filterTable()" id="{{.}}">
+                                        <label class="form-check-label" for="{{.}}">
+                                            {{.}}
+                                        </label>
+                                    </div>
+                                </div>
+                            {{/fixtures.teams}}
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                
+                <!-- Put the countdown ended condition first to avoid problems with load-in -->
+                <!-- <div 
+                v-if="time_to_expiry.ms < 0"
+                class="alert alert-danger" 
+                role="alert">
+                    <p>Your credentials have expired. You will need to refresh the page to restart editing</p>
+                </div> -->
+
+                <!-- <div v-else> -->
+
+                    <!-- Instructions -->
+                    <div class="container-md mb-2 p-2 bg-secondary text-bg-secondary border-2 border-dark">
+                        <div class="row">
+                            <!-- Highlighting rules -->
+                            <div class="col">
+                                    <i class="bi bi-square-fill" style="color: #c7dbd2; font-size:x-large;"></i> 
+                                    Edited fixtures are highlighted in green
+                                <br>
+                                    <i class="bi bi-square" style="color: red; font-size:x-large;"></i> 
+                                    The specific fields edited are marked with a red box
+                                <br>
+                                    <i class="bi bi-square-fill" style="color: #eccccf; font-size:x-large;"></i> 
+                                    Fixtures marked for deletion are highlighted in red
+                                <!-- <p><i class="bi bi-square-fill" style="color: rgb(199, 219, 210);"></i> Edited fixtures are highlighted in green</p> -->
+                            </div>
+                            <!-- What the buttons do -->
+                            <div class="col">
+                                
+                            </div>
+                        </div>
+                      </div>
+                    
+                    <p>Hover over a cell to see the original value</p>
+
+                    <!-- <div 
+                    class="alert alert-primary" 
+                    role="alert" 
+                    @click="updateCountdown()">
+                        <p>This page will expiry in <span class="badge bg-primary" id="countdown">{{time_to_expiry.str}}</span></p>
+                        <p>Any changes not submitted before expiration will be lost. Once the timer expires, you will need to refresh the page</p>
+                    </div> -->
+                
+                    <button 
+                    class="btn btn-warning mb-3" 
+                    id="submit_button" 
+                    :disabled="!changesMade"
+                    @click="sendUpdates()"
+                    >
+                        Update
+                    </button>
+                    <span 
+                    style="padding: left 2rem;"
+                    > <!-- Report to user what changes are actually going to be made -->
+                        Fixtures Modified 
+                        <span v-if="modifiedCount > 0" class="badge bg-primary">{{modifiedCount}}</span>
+                        <span v-else class="badge bg-secondary">{{modifiedCount}}</span> 
+                        Marked for Deletion 
+                        <span v-if="deletedCount > 0" class="badge bg-danger">{{deletedCount}}</span>
+                        <span v-else class="badge bg-secondary">{{deletedCount}}</span> 
+                        New Fixtures Added
+                        <span v-if="newFixturesCount > 0" class="badge bg-success">{{newFixturesCount}}</span>
+                        <span v-else class="badge bg-secondary">{{newFixturesCount}}</span> 
+                    </span>
+                <!-- </div> -->
+
+                <table class="table table-striped table-hover" id="fixturesTable-edit">
+                    <thead class="table-dark">
+                        <tr>
+                        <!-- <th scope="col">ID</th> -->
+                        <th scope="col">Date</th>
+                        <th scope="col">Home Team</th>
+                        <th scope="col">Home<br> Points</th>
+                        <th scope="col">Home<br> Score</th>
+                        <th scope="col">Away Team</th>
+                        <th scope="col">Away<br> Points</th>
+                        <th scope="col">Away<br> Score</th>
+                        <!-- <th scope="col">Live</th> -->
+                        <th scope="col">
+                            <div class="d-grid gap-2 col-2">
+                                <button  
+                                class="btn btn-success" 
+                                @click="addNewFixture"
+                                > <!--  -->
+                                    +
+                                </button>
+                            </div>
+                        </th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody class="table-group-divider">
+                        <!-- Existing games -->
+                        <tr 
+                        v-for="(game, index) in games"
+                        :class="{
+                            'table-danger border border-danger ': game.deleted,
+                            'table-success': game.modified
+                        }"
+                        >
+                            <!-- Date -->
+                            <td 
+                            :class="{
+                                'border border-danger table-info': 
+                                game.ISO_date != games_clean[index].ISO_date &&
+                                !game.deleted
+                            }"
+                            >
+                                <input 
+                                v-model="game.ISO_date" 
+                                class="form-control" 
+                                type="date" 
+                                style="width: 9rem;" 
+                                :title="games_clean[index].date"
+                                required
+                                >
+                            </td> 
+                            
+                            <!-- Home Team -->
+                            <td 
+                            :class="{
+                                'border border-danger table-info': game.homeTeam.teamName != games_clean[index].homeTeam.teamName &&
+                                !game.deleted
+                            }"
+                            >
+                                <select 
+                                class="form-select" 
+                                aria-label="Team Select" 
+                                v-model="game.homeTeam.teamName"  
+                                :title="games_clean[index].homeTeam.teamName"
+                                >
+                                    <option 
+                                    v-for="team in teams"
+                                    >
+                                        {{team.teamName}}
+                                    </option>
+                                </select>
+                            </td> 
+                            
+                            <!-- Home Team Points Awarded-->
+                            <td 
+                                :class="{
+                                    'border border-danger table-info': game.homePoints != games_clean[index].homePoints &&
+                                    !game.deleted
+                                }"
+                            >
+                                <input 
+                                    class="form-control" 
+                                    style="width: 4rem;" 
+                                    type="number" 
+                                    v-model="game.homePoints" 
+                                    :title="games_clean[index].homePoints"
+                                >
+                            </td> 
+                            
+                            <!-- Home Team Score -->
+                            <td 
+                            :class="{
+                                'border border-danger table-info': game.homeScore != games_clean[index].homeScore &&
+                                !game.deleted
+                            }"
+                            >
+                                <input 
+                                class="form-control" 
+                                style="width: 5rem;" 
+                                type="number" 
+                                v-model="game.homeScore"
+                                :title="games_clean[index].homeScore"
+                                >
+                            </td>
+                            
+                            <!-- Away Team -->
+                            <td 
+                            :class="{
+                                'border border-danger table-info': game.awayTeam.teamName != games_clean[index].awayTeam.teamName &&
+                                !game.deleted
+                            }"
+                            >
+                                <select 
+                                class="form-select" 
+                                aria-label="Team Select" 
+                                v-model="game.awayTeam.teamName"
+                                :title="games_clean[index].awayTeam.teamName"
+                                required
+                                >
+                                    <option 
+                                    v-for="team in teams"
+                                    >
+                                        {{team.teamName}}
+                                    </option>
+                                </select>
+                            </td> 
+                            
+                            <!-- Away Team Points -->
+                            <td 
+                            :class="{
+                                'border border-danger table-info': game.awayPoints != games_clean[index].awayPoints &&
+                                !game.deleted
+                            }"
+                            >
+                                <input 
+                                class="form-control" 
+                                style="width: 4rem;" 
+                                type="number" 
+                                v-model="game.awayPoints"
+                                :title="games_clean[index].awayPoints"
+                                >
+                            </td>
+                            
+                            <!-- Away Team Score -->
+                            <td 
+                            :class="{
+                                'border border-danger table-info': game.awayScore != games_clean[index].awayScore &&
+                                !game.deleted
+                            }"
+                            >
+                                <input 
+                                class="form-control" 
+                                style="width: 5rem;" 
+                                type="number" 
+                                v-model="game.awayScore"
+                                :title="games_clean[index].awayScore"
+                                >
+                            </td>
+
+                            <!-- Delete Button -->
+                            <td>
+                                <div class="d-grid gap-2 col-2">
+                                    <!-- Undo button -->
+                                    <button  
+                                    class="btn btn-primary"
+                                    v-if="game.deleted"
+                                    @click="game.deleted = false"
+                                    title="Undo"
+                                    >
+                                        &#11148;
+                                    </button>
+                                    <!-- Delete Button -->
+                                    <button  
+                                    class="btn btn-danger"
+                                    v-else
+                                    @click="game.deleted = true"
+                                    title="Mark for deletion"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            </td> 
+                        </tr>
+                            
+                        <!-- New games -->
+                        <!-- Lot of code duplication, but the implication is slightly different, so it is neccessary -->
+                        <tr 
+                        v-for="(game, index) in games_new"
+                        class="table-warning"
+                        >
+                            <!-- Date -->
+                            <td>
+                                <input 
+                                v-model="game.ISO_date" 
+                                class="form-control" 
+                                type="date" 
+                                style="width: 9rem;" 
+                                :title="games_clean[index].date"
+                                >
+                                <!-- <span 
+                                class="badge rounded-pill text-bg-info"
+                                >
+                                    New Fixture
+                                </span> -->
+                            </td> 
+                            
+                            <!-- Home Team -->
+                            <td>
+                                <select 
+                                class="form-select" 
+                                aria-label="Team Select" 
+                                v-model="game.homeTeam.teamName"  
+                                :title="games_clean[index].homeTeam.teamName"
+                                >
+                                    <option 
+                                    v-for="team in teams"
+                                    >
+                                        {{team.teamName}}
+                                    </option>
+                                </select>
+                            </td> 
+                            
+                            <!-- Home Team Points Awarded-->
+                            <td>
+                                <input 
+                                    class="form-control" 
+                                    style="width: 4rem;" 
+                                    type="number" 
+                                    v-model="game.homePoints" 
+                                    :title="games_clean[index].homePoints"
+                                    required
+                                >
+                            </td> 
+                            
+                            <!-- Home Team Score -->
+                            <td>
+                                <input 
+                                class="form-control" 
+                                style="width: 5rem;" 
+                                type="number" 
+                                v-model="game.homeScore"
+                                :title="games_clean[index].homeScore"
+                                >
+                            </td>
+                            
+                            <!-- Away Team -->
+                            <td>
+                                <select 
+                                class="form-select" 
+                                aria-label="Team Select" 
+                                v-model="game.awayTeam.teamName"
+                                :title="games_clean[index].awayTeam.teamName"
+                                required
+                                >
+                                    <option 
+                                    v-for="team in teams"
+                                    >
+                                        {{team.teamName}}
+                                    </option>
+                                </select>
+                            </td> 
+                            
+                            <!-- Away Team Points -->
+                            <td>
+                                <input 
+                                class="form-control" 
+                                style="width: 4rem;" 
+                                type="number" 
+                                v-model="game.awayPoints"
+                                :title="games_clean[index].awayPoints"
+                                >
+                            </td>
+                            
+                            <!-- Away Team Score -->
+                            <td>
+                                <input 
+                                class="form-control" 
+                                style="width: 5rem;" 
+                                type="number" 
+                                v-model="game.awayScore"
+                                :title="games_clean[index].awayScore"
+                                >
+                            </td>
+
+                            <!-- Delete Button -->
+                            <td>
+                                <div class="d-grid gap-2 col-2">
+                                    <button  
+                                    class="btn btn-danger"
+                                    @click="deleteNewFixture(index)"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            </td> 
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+    <!-- Vue mounting -->
+    <script src="../resources/fixtures-edit-vue-js"></script>
+    <script type="module">
+        import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+        createApp(mainVueApp).mount('#app')
+
+        let countdown = setInterval(() => {return })
+    </script>
+      
+  </body>
+</html>

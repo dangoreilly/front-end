@@ -123,19 +123,166 @@ router.get('/', function(req, res, next) {
       res.render('fixtures-index', {test_leagues}); 
 });
 
+// Standard route for viewing fixtures
 router.get('/:league', function(req, res, next) {
 
       let leagueURL = req.params.league;
 
+      let _league = Promise.resolve(getLeagueObject(leagueURL))
+      .then((fixtures) => {
 
+            // console.log(league);
+        
+            if (fixtures.success){
+
+                  res.render('fixtures', {fixtures});
+
+            }
+            else {
+                  res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
+            }    
+
+      })
+      
+
+});
+
+// API route that just serves league object, not HTML
+router.get('/json/:league', function(req, res, next) {
+
+      let leagueURL = req.params.league;
+      let league = Promise.resolve(getLeagueObject(leagueURL))
+      .then((fixtures) => {
+            // We don't need to verify that the fixtures object actually exists 
+            // Because this should never be called unless the edit page is loaded
+            // And the edit page won't load unless this is verified. 
+            res.json(fixtures)
+      })
+
+});
+
+// Route for fixtures secretary to manage fixtures
+router.get('/edit/:league', 
+      passport.authenticate('basic', { session: false }),
+      function(req, res) {
+
+            let leagueURL = req.params.league;
+            let user_jwt = req.user;
+
+            let _league = Promise.resolve(getLeagueObject(leagueURL))
+            .then((fixtures) => {
+
+                  // console.log(league);
+            
+                  if (fixtures.success){
+
+                        fileName = "fixtures-edit-vue.html";
+                        options = { root: "resources/fixturesEdit"};
+
+                        //Expires after 60 mins from the time it is set.
+                        res.cookie("nebb_jwt_token", user_jwt, {expire: 3.6e+6 + Date.now()});
+
+                        res.sendFile(fileName, options, function (err) {
+                              if (err) {
+                                  next(err);
+                              }
+                          });
+
+                  }
+                  else {
+                        res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
+                  }    
+
+            })
+
+            // // Define the fixtures object as a promise due to the async axios call
+            // let _fixtures = Promise.resolve(getFixtures(leagueURL));
+
+            // // When promise has been resolved, use that data to render the page
+            // Promise.all([_fixtures]).then((resolvedPromises) =>{
+            //       // Doesn't really need to be an array like this 
+            //       // But it makes it easier to refactor later if needed
+            //       // And it doesn't really matter if I never do
+
+            //       let f = resolvedPromises[0];
+
+            //       // console.log (f);
+            //       // Make sure the request was actually successful
+            //       if (f.success){
+                        
+            //             // let t = resolvedPromises[1];
+
+            //             let fixtures = {
+            //                   "league": f.league,
+            //                   "games": f.games,
+            //                   // "teams": t
+            //             }
+            //             // console.log(fixtures);
+
+            //             //Expires after 60 mins from the time it is set.
+            //             res.cookie("jwt_token", user_jwt, {expire: 3.6e+6 + Date.now()});
+            //             // res.render('fixtures-edit', {fixtures});
+            //             res.render('fixtures-edit-react', {fixtures});
+            //       }
+            //       else{
+            //             res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
+            //       }
+            // });
+
+            
+      }
+);
+
+// Serving resource files for edit page
+router.get('/resources/:resource', function(req, res, next) {
+
+      let requestedResource = req.params.resource;
+      options = { root: "resources/fixturesEdit"};
+
+      resources = [
+            ["fixtures-edit-vue-js", "fixtures-edit-vue.js"]
+      ];
+
+
+      resources.forEach(r => {
+            if (requestedResource == r[0]){
+                  res.sendFile(r[1], options, function (err) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
+            }
+      })
+      
+
+});
+
+async function getLeagueObject(leagueURL){
+      //INPUT
+      // url: string
+      
+      //METHOD
+      // Make async calls to API for raw data
+      // Combine processed data into a single object for easier UI comsumption
  
+      //OUTPUT
+      // <league> object
 
-      let _fixtures = Promise.resolve(getFixtures(leagueURL));
-      let _teams = Promise.resolve(getTeams(leagueURL));
+      //Initialise league object with fail flag
+      let league = {"success": false};
 
-      Promise.all([_fixtures, _teams]).then((resolvedPromises) =>{
-            let f = resolvedPromises[0];
-            let t = resolvedPromises[1];
+      // let _fixtures = Promise.resolve(getFixtures(leagueURL));
+      // let _teams = Promise.resolve(getTeams(leagueURL));
+      let f = await getFixtures(leagueURL);
+      let t = await getTeams(leagueURL);
+
+
+      // Promise.all([_fixtures, _teams]).then((resolvedPromises) =>{
+            // let f = resolvedPromises[0];
+            // let t = resolvedPromises[1];
+
+            // console.log("Fixtures: ", f.success);
+            // console.log("Teams: ", t.success)
             
             if (f.success && t.success){
 
@@ -143,21 +290,21 @@ router.get('/:league', function(req, res, next) {
                   // and a list of games w/ the teams, we can match them for rendering later 
                   let games = matchClubsAndTeams(f.games, t.teams);
 
-                  let fixtures = {
+                  league = {
+                        "id": f.id,
                         "league": f.league,
                         "games": games,
-                        "teams": t.teams
+                        "teams": t.teams,
+                        "success": true
                   }
 
-                  res.render('fixtures', {fixtures});
 
             }
-            else{
-                  res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
-            }
-      });
 
-});
+      // });
+      // console.log(league);
+      return league;
+}
 
 function matchClubsAndTeams(fixtures, teams){
       //INPUT
@@ -170,23 +317,23 @@ function matchClubsAndTeams(fixtures, teams){
       // {team, club} objects
  
       //OUTPUT
-      // <league> object
+      // <games> object
 
-      let league = [];
+      let games = [];
 
       fixtures.forEach(fixture => {
 
             //Don't mutate the original
-            let f = Object.create(fixture);
+            // let f = Object.create(fixture);
 
-            f.homeTeam = getClubForTeam(f.homeTeam, teams);
-            f.awayTeam = getClubForTeam(f.awayTeam, teams);
+            fixture.homeTeam = getClubForTeam(fixture.homeTeam, teams);
+            fixture.awayTeam = getClubForTeam(fixture.awayTeam, teams);
 
-            league.push(f);
+            games.push(fixture);
 
       })
 
-      return league;
+      return games;
 
 
 }
@@ -222,21 +369,16 @@ function getClubForTeam(searchTeam, teams){
 passport.use(new BasicStrategy(
       function(userid, password, done) {
 
-            // If we're in a dev enviroment, can just skip auth
-            // Unless Auth is thing being developed, ofc
-            // if (req.app.get('env') === 'development')
-            //       return done(null, true);
-
-            // If Auth is thing being developed, then hardcode some credentials to save effort
-            // of typing them in every time
-            _userid = "fixtures@nebb.ie";
-            _password = "password1";
+            // Temporary hardcoded credentials to save effort
+            // of typing them in every time while testing CRUD interface
+            userid = "fixtures@nebb.ie";
+            password = "password1";
 
             //Otherwise, talk to Strapi and see if this user is allowed see this screen
             axios
             .post(auth_path, {
-            "identifier": _userid,
-            "password": _password,
+            "identifier": userid,
+            "password": password,
             })
             .then(response => {
                   // Handle success.
@@ -252,47 +394,6 @@ passport.use(new BasicStrategy(
       }
 ));
 
-router.get('/edit/:league', 
-      passport.authenticate('basic', { session: false }),
-      function(req, res) {
-
-            let leagueURL = req.params.league;
-            let user_jwt = req.user;
-
-            // Define the fixtures object as a promise due to the async axios call
-            let _fixtures = Promise.resolve(getFixtures(leagueURL));
-
-            // When promise has been resolved, use that data to render the page
-            Promise.all([_fixtures]).then((resolvedPromises) =>{
-                  // Doesn't really need to be an array like this 
-                  // But it makes it easier to refactor later if needed
-                  // And it doesn't really matter if I never do
-
-                  let f = resolvedPromises[0];
-                  // Make sure the request was actually successful
-                  if (f.success){
-                        
-                        // let t = resolvedPromises[1];
-
-                        let fixtures = {
-                              "league": f.league,
-                              "games": f.games,
-                              // "teams": t
-                        }
-                        // console.log(fixtures);
-
-                        //Expires after 60 mins from the time it is set.
-                        res.cookie("jwt_token", user_jwt, {expire: 3.6e+6 + Date.now()});
-                        res.render('fixtures-edit', {fixtures});
-                  }
-                  else{
-                        res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
-                  }
-            });
-
-            
-      }
-);
 
 function parseDate(_date){
       //Takes in a date string in the format YYYY-MM-DD
@@ -328,11 +429,12 @@ async function getTeams(leagueURL){
 
                   let attribs = element.attributes;
 
+                  let id = element.id;
                   let teamName = attribs.Name;
                   let clubName = attribs.club.data.attributes.Name;
 
                   //Pair the teamName and ClubName into an objectm and add to the list
-                  teams.push({teamName, clubName});
+                  teams.push({id, teamName, clubName});
                   
             });
 
@@ -371,9 +473,9 @@ async function getFixtures(leagueURL){
             let _fixtures = response.data.data;
             // console.log(_fixtures[0]);
             
-            //Use the first fixture to grab the name of the league
+            // Use the first fixture to grab the name and ID of the league
             let leagueName = _fixtures[0].attributes.league.data.attributes.name;
-            // console.log(leagueName);
+            let leagueId = _fixtures[0].id;
 
             _fixtures.forEach(element => {
 
@@ -382,6 +484,7 @@ async function getFixtures(leagueURL){
                   let fixtureInfo = 
                   {
                         "id":element.id,
+                        "ISO_date": attribs.Date,
                         "date":parseDate(attribs.Date),
                         // "parsedDate": function(){
                         //       let parts =this.date.split("/");
@@ -403,13 +506,15 @@ async function getFixtures(leagueURL){
             });
 
             // Return an object with both games and the league name to be consumed by the view engine
-            return responseObject= {
+            let responseObject= {
+                  "id": leagueId,
                   "league": leagueName,
                   "games": fixtures,
                   "success": fixtures.length > 0
             };
+            // console.log(responseObject)
                   
-
+            return responseObject;
             
       }
       catch(error) {
