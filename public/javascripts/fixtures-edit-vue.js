@@ -10,6 +10,7 @@ var mainVueApp = {
         games_new:[],
         modified: false,
         strapi_cookie: null,
+
     }),
   
     created() {
@@ -214,15 +215,6 @@ var mainVueApp = {
             //Delete the fixture that hasn't yet been pushed 
             this.games_new.splice(index, 1);
         },
-        deleteFixtureFromServer(){
-            //Send a delete request to the server for the selected fixture
-            console.log("deleteFixtureFromServer()");
-        },
-        sendNewGames(){
-            //Send new fixtures to the server
-            //Update the "sent" flag to update the UI
-            console.log("sendNewGames()");
-        },
         resetAll(){
             // Clear the list of new games
             this.games_new = [];
@@ -247,14 +239,70 @@ var mainVueApp = {
 
         sendUpdates(){
 
-            // Create modal
             // Send POST request
-            // Update modal 
+            this.POSTnewFixtures();
             // Send PUT request
+            this.PUTupdatedFixtures();
             // Send DELETE request
+            this.deleteFixturesFromServer();
+            // Report to the user
+            window.alert("Fixtures updated");
+            // Refresh the UI
+            this.resetAll();
+            this.fetchLeagueData();
+            // console.log(this.strapi_cookie);
+            // console.log("sendUpdates()");
 
-            console.log(this.strapi_cookie);
-            console.log("sendUpdates()");
+        },
+        deleteFixturesFromServer(){
+            // Collect an array of fixtures to be deleted
+            // This could be done live, but it's easier to do it here
+            let toBeDeleted = [];
+            let deletedGames = [];
+            let deleted = 0;
+
+            this.games.forEach((game) => {
+                if (game.deleted){
+                    toBeDeleted.push(game);
+                }
+            });
+
+            // For each game that's getting deleted, send a delete request in a promise. 
+            // We'll resolve them all later
+            for( i = 0; i < toBeDeleted.length; i ++){
+                // TODO: Update CMS link
+                deletedGames[i] = Promise.resolve( 
+                    fetch(`http://localhost:1337/api/fixtures/${toBeDeleted[i].id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${this.strapi_cookie}`,
+
+                        }
+                    })
+                );
+            }
+
+            Promise.all(deletedGames)
+            .then(deletedGames_resolved => {
+                // Now that we have responses for all our DELETEs, check how many were actually successful
+                for( i = 0; i < deletedGames_resolved.length; i ++){
+                    if 
+                }
+            })
+
+
+            // If a fixture fails to be deleted, throw an alert to the user with the 
+            // fixture ID that failed to delete. 
+
+            //When finished, Print succesful number of deletes to console
+            console.log("deleteFixtureFromServer()");
+        },
+        POSTnewFixtures(){
+            //Send new fixtures to the server
+            //Update the "sent" flag to update the UI
+            console.log("sendNewGames()");
         },
 
     }
