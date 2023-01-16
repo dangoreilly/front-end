@@ -14,6 +14,7 @@ var indexRouter = require('./routes/index');
 var fixturesRouter = require('./routes/fixtures');
 var standingsRouter = require('./routes/standings');
 var blogRouter = require('./routes/blog');
+var apiRouter = require('./routes/api');
 
 var app = express();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/json', apiRouter);
 app.use('/fixtures', fixturesRouter);
 app.use('/standings', standingsRouter);
 app.use('/blog', blogRouter);

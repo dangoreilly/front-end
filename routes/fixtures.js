@@ -180,20 +180,6 @@ router.get('/edit/',
       }
 );
 
-// API route that just serves league object, not HTML
-router.get('/json/:league', function(req, res, next) {
-
-      let leagueURL = req.params.league;
-      let league = Promise.resolve(nebb.getLeagueObject(leagueURL))
-      .then((fixtures) => {
-            // We don't need to verify that the fixtures object actually exists 
-            // Because this should never be called unless the edit page is loaded
-            // And the edit page won't load unless this is verified. 
-            res.json(fixtures)
-      })
-
-});
-
 // Standard route for viewing fixtures
 router.get('/:league', function(req, res, next) {
 
