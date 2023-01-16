@@ -8,8 +8,6 @@ const { resource } = require('../app');
 const dotenv = require('dotenv').config();
 
 let token = process.env.STRAPI_BEARER;
-let fixturesEditUser = "user"; //process.env.FIXTURES_EDIT_USER;
-let fixturesEditPass = "pass";//process.env.FIXTURES_EDIT_PASS;
 let auth_path = process.env.STRAPI + "api/auth/local";
 
 
@@ -123,6 +121,36 @@ router.get('/', function(req, res, next) {
       res.render('fixtures-index', {test_leagues}); 
 });
 
+// Route for fixtures secretary to manage fixtures
+router.get('/edit/', 
+
+      //Check STRAPI to see if this user is allowed make edits
+                  //TODO: Integrate actual login page
+      passport.authenticate('basic', { session: false }),
+      function(req, res) {
+
+            //If the user has permissions, STRAPI will give us a jwt token 
+            let user_jwt = req.user;
+
+            // Prepare the edit page to send
+            // We're not rendering this one, because rendering it client side with Vue
+            // is more powerful, and we don't care about SEO on this page
+            fileName = "fixtures-edit-vue.html";
+            options = { root: "public/pages"};
+
+            // Send the jwt token to use client side
+            res.cookie("nebb_jwt_token", user_jwt);
+
+            // And send the page
+            res.sendFile(fileName, options, function (err) {
+                  if (err) {
+                        next(err);
+                  }
+                  });
+            
+      }
+);
+
 // Standard route for viewing fixtures
 router.get('/:league', function(req, res, next) {
 
@@ -161,77 +189,7 @@ router.get('/json/:league', function(req, res, next) {
 
 });
 
-// Route for fixtures secretary to manage fixtures
-router.get('/edit/:league', 
-      passport.authenticate('basic', { session: false }),
-      function(req, res) {
 
-            let leagueURL = req.params.league;
-            let user_jwt = req.user;
-
-            let _league = Promise.resolve(getLeagueObject(leagueURL))
-            .then((fixtures) => {
-
-                  // console.log(league);
-            
-                  if (fixtures.success){
-
-                        fileName = "fixtures-edit-vue.html";
-                        options = { root: "public/pages"};
-
-                        //Expires after 60 mins from the time it is set.
-                        res.cookie("nebb_jwt_token", user_jwt, {expire: 3.6e+6 + Date.now()});
-
-                        res.sendFile(fileName, options, function (err) {
-                              if (err) {
-                                  next(err);
-                              }
-                          });
-
-                  }
-                  else {
-                        res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
-                  }    
-
-            })
-
-            // // Define the fixtures object as a promise due to the async axios call
-            // let _fixtures = Promise.resolve(getFixtures(leagueURL));
-
-            // // When promise has been resolved, use that data to render the page
-            // Promise.all([_fixtures]).then((resolvedPromises) =>{
-            //       // Doesn't really need to be an array like this 
-            //       // But it makes it easier to refactor later if needed
-            //       // And it doesn't really matter if I never do
-
-            //       let f = resolvedPromises[0];
-
-            //       // console.log (f);
-            //       // Make sure the request was actually successful
-            //       if (f.success){
-                        
-            //             // let t = resolvedPromises[1];
-
-            //             let fixtures = {
-            //                   "league": f.league,
-            //                   "games": f.games,
-            //                   // "teams": t
-            //             }
-            //             // console.log(fixtures);
-
-            //             //Expires after 60 mins from the time it is set.
-            //             res.cookie("jwt_token", user_jwt, {expire: 3.6e+6 + Date.now()});
-            //             // res.render('fixtures-edit', {fixtures});
-            //             res.render('fixtures-edit-react', {fixtures});
-            //       }
-            //       else{
-            //             res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
-            //       }
-            // });
-
-            
-      }
-);
 
 async function getLeagueObject(leagueURL){
       //INPUT
@@ -473,7 +431,9 @@ async function getFixtures(leagueURL){
                         "awayTeam": attribs.awayTeam.data.attributes.Name,
                         "awayScore": attribs.awayTeamScore || "-",
                         "awayPoints": attribs.awayTeamPointsAwarded || "-",
-                        "posted": attribs.posted
+                        "homeWin": attribs.homeTeamScore > attribs.awayTeamScore,  // Quick check for the winner
+                        "posted": attribs.homeTeamPointsAwarded + attribs.awayTeamPointsAwarded > 0,  // If points were awarded to either team, then the fixture should be displayed
+                        "pastDue": attribs.Date < Date.now() && !this.posted // Flag for seeing if the fixture is in the past, but hasn't been updated
                   }
                   // console.log(fixtureInfo);
 

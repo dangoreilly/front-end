@@ -137,9 +137,22 @@
                         <td>{{date}}</td>
                         {{!-- Is this a posted score? In that case format it --}}
                         {{#posted}}
-                            <td {{#homeWin}}class="table-success" style="font-weight: bold;"{{/homeWin}} title="{{homeTeam.clubName}}">{{homeTeam.teamName}}</td>
-                                <td><span class="badge  text-bg-{{#homeWin}}success{{/homeWin}}{{^homeWin}}secondary{{/homeWin}}">{{homeScore}}</span>
-                                <span class="badge  text-bg-{{#homeWin}}secondary{{/homeWin}}{{^homeWin}}success{{/homeWin}}">{{awayScore}}</span></td>
+                            <td {{#homeWin}}
+                                    class="table-success" style="font-weight: bold;"
+                                {{/homeWin}} 
+                                title="{{homeTeam.clubName}}">
+                                    {{homeTeam.teamName}}
+                            </td>
+                            <td>
+                                <span 
+                                class="badge  text-bg-{{#homeWin}}success{{/homeWin}}{{^homeWin}}secondary{{/homeWin}}">
+                                    {{homeScore}}
+                                </span>
+                                <span 
+                                class="badge  text-bg-{{#homeWin}}secondary{{/homeWin}}{{^homeWin}}success{{/homeWin}}">
+                                    {{awayScore}}
+                                </span>
+                                </td>
                             <td {{^homeWin}}class="table-success" style="font-weight: bold;"{{/homeWin}} title="{{awayTeam.clubName}}">{{awayTeam.teamName}}</td>
                         {{/posted}}
                         {{!-- Not a posted score? No need to format --}}
