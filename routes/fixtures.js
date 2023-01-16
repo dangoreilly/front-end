@@ -177,7 +177,7 @@ router.get('/edit/:league',
                   if (fixtures.success){
 
                         fileName = "fixtures-edit-vue.html";
-                        options = { root: "resources/fixturesEdit"};
+                        options = { root: "public/pages"};
 
                         //Expires after 60 mins from the time it is set.
                         res.cookie("nebb_jwt_token", user_jwt, {expire: 3.6e+6 + Date.now()});
@@ -232,30 +232,6 @@ router.get('/edit/:league',
             
       }
 );
-
-// Serving resource files for edit page
-router.get('/resources/:resource', function(req, res, next) {
-
-      let requestedResource = req.params.resource;
-      options = { root: "resources/fixturesEdit"};
-
-      resources = [
-            ["fixtures-edit-vue-js", "fixtures-edit-vue.js"]
-      ];
-
-
-      resources.forEach(r => {
-            if (requestedResource == r[0]){
-                  res.sendFile(r[1], options, function (err) {
-                        if (err) {
-                            next(err);
-                        }
-                    });
-            }
-      })
-      
-
-});
 
 async function getLeagueObject(leagueURL){
       //INPUT
