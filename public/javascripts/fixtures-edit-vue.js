@@ -37,23 +37,24 @@ var mainVueApp = {
             // Unfortunately, need to deep check for equivalence
             // Because js can't equivalence check objects properly
 
+            let rtrn = false;
+
             for(i = 0; i < this.games.length; i++){
 
                 if(this.checkDifferences(this.games[i], i)){
                     //mark it as changed
                     this.games[i].modified = true;
-                    return true;
+                    rtrn = true;
                 }
 
                 //Also check if it's marked for deletion
-                if(this.games[i].deleted) return true;
+                if(this.games[i].deleted) rtrn = true;
             }
 
             //Now check if there have been new additions
-            if (this.newFixturesAdded) return true;
+            if (this.newFixturesAdded) rtrn = true;
 
-            // If we made it this far, then every game is the same as when it was fetched
-            return false;
+            return rtrn;
 
         },
         newFixturesAdded(){
@@ -223,9 +224,20 @@ var mainVueApp = {
             console.log("sendNewGames()");
         },
         resetAll(){
-            //Send new fixtures to the server
-            //Update the "sent" flag to update the UI
-            console.log("Reset all games");
+            // Clear the list of new games
+            this.games_new = [];
+            // Restore the values from the clean copy
+            // Don't refresh from server
+            // We might add that as a different function later
+            // Deep copying as before
+            this.games = JSON.parse(JSON.stringify(this.games_clean));
+
+        },
+        resetOne(index){
+            // Restore the values from the clean copy, for this fixture only
+            // Deep copying as before
+            this.games[index] = JSON.parse(JSON.stringify(this.games_clean[index]));
+
         },
         
         // TODO: Fixture Update Review Modal

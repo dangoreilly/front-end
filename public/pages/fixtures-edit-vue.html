@@ -181,7 +181,7 @@
                         <tr 
                         v-for="(game, index) in games"
                         :class="{
-                            'table-danger border border-danger ': game.deleted,
+                            'table-danger ': game.deleted,
                             'table-success': game.modified
                         }"
                         >
@@ -343,6 +343,7 @@
                                         'btn btn-outline-secondary rounded-pill btn-sm': !game.modified,
                                     }"
                                     :disabled="!game.modified"
+                                    @click="resetOne(index)"
                                     >
                                         Reset
                                     </button>
