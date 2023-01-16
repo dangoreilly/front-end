@@ -1,53 +1,37 @@
 var mainVueApp = {
     data: () => ({
-      league: "unknown",
-      games: [],
-      games_clean: [],
-      teams: [],
-      leagueID: 0,
-      leagueURL: "#",
-      games_new:[],
-      modified: false,
-      cookie_expiry: null,
-      time_to_expiry: {
-        ms: null,
-        str: null,
-        },
+        leagues: [],
+        currentLeague: null,
+        selectedLeague: "", // A placeholder to avoid issues with the currentLeague object being overwritten
+        games: [],
+        games_clean: [],
+        teams: [],
+        leagueID: 0,
+        games_new:[],
+        modified: false,
+        strapi_cookie: null,
     }),
   
     created() {
       // fetch on init
-      this.getURL();
-      this.fetchData();
-      this.cookie_expiry = 3.6e+6 + Date.now();
-
-      //Start the countdown for timeout
-      setInterval(this.updateCountdown, 1000);
+      
+      strapi_cookie = this.getStrapiCookie();
+    //   this.fetchData();
+        Promise.resolve(this.fetchLeagues())
+        .then((r) => {console.log("Vue mounted")});
     },
 
 
     computed:{
-        strapi_cookie(){
-            // Reads the cookies in local storage, 
-            let name = "nebb_jwt_token=";
-            let decodedCookie = decodeURIComponent(document.cookie);
-            let ca = decodedCookie.split(';');
-            for(let i = 0; i <ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-                }
-            }
-            return "";
+        leagueURL(){
+
+            if(this.currentLeague)
+                return "/json/fixtures/" + this.currentLeague.url;
+
+            else
+                return "/#";
+
         },
-
-        // time_to_expiry(){
-
-            
-        // },
 
         changesMade(){
             // Unfortunately, need to deep check for equivalence
@@ -107,11 +91,12 @@ var mainVueApp = {
     },
   
     methods: {
-        async fetchData() {
+        async fetchLeagueData() {
             
+            console.log(`Fetching from ${this.leagueURL}`)
             let data = await (await fetch(this.leagueURL)).json()
             //Now that we have the data, parse it
-
+            console.log(data);
             this.league = data.league;
             this.games = data.games;
             this.games_clean = JSON.parse(JSON.stringify(data.games)); // For later comparisons for UI highlighting, deep copying is needed
@@ -119,43 +104,77 @@ var mainVueApp = {
             this.teams = data.teams;
         },
 
-        getURL(){
-            let full_url = document.URL.split("/");
-            let relevant_URL = full_url[full_url.length-1];
-            this.leagueURL = "/fixtures/json/" + relevant_URL;
-            // console.log(`Fetching from ${this.leagueURL}`)
+        async fetchLeagues() {
+            
+            let data = await (await fetch("/json/leagues")).json()
+            // this.leagues = this.getLeagueUrlsOnly(data.leagues);
+            this.leagues = data.leagues;
+            // console.log(this.leagues)
+            // Initialise the first currentLeague
+            this.currentLeague = this.leagues[0]; 
+            this.selectedLeague = this.currentLeague.leagueName;
+            this.fetchLeagueData();
         },
 
-        updateCountdown(){
+        getLeagueUrlsOnly(leagueObjectArray){
 
-            //First get the number of ms
-            let time_in_ms = this.cookie_expiry - Date.now();
-            // console.log(time_in_ms, this.cookie_expiry, Date.now())
+            // For each object in the array
+            // extract it's URL and add it to a new array
+            // return only the stripped array
+            let leagueURLs = []
 
-            //Convert that into ss, mm, hh
-            let seconds = Math.floor(time_in_ms / 1000);
-            let minutes = Math.floor(seconds / 60);
-            // let hours = Math.floor(minutes / 60);
+            leagueObjectArray.forEach((league) => {
 
-            seconds = seconds % 60;
-            minutes = minutes % 60;
+                leagueURLs.push(league.url);
 
-            //And now stringify it
-            let seconds_string = seconds.toString().padStart(2, '0');
-            let minutes_string = minutes.toString().padStart(2, '0');
-            // let hours_string = hours.toString().padStart(2, '0');
+            });
+            // console.log(leagueObjectArray);
+            // console.log(leagueURLs);
 
-            // And now update the props
-            this.time_to_expiry.ms = time_in_ms;
-            this.time_to_expiry.str = `${minutes_string}:${seconds_string}`;
+            return leagueURLs;
+        },
 
-            // return {time_in_ms, stringified: `${minutes_string}:${seconds_string}`};
+        // We're editing the leagueName directly in the select box
+        // So we need to manually update the currentLeague Object
+        // And refetch the data
+        reconcileLeague(){
 
-            
-            // let countdown = document.getElementById("countdown");
-            // countdown.innerText = this.time_to_expiry.stringified;
-            // console.log(this.time_to_expiry)
-            // console.log(this.cookie_expiry)
+            //Find the league object that has the same name as the input box, and update the CurrentLeague object.
+            this.leagues.forEach(lg => {
+
+                if (lg.leagueName == this.selectedLeague){
+                    this.currentLeague = lg;
+                } 
+            });
+
+            this.fetchLeagueData();
+
+        },
+
+        // getURL(){
+        //     let full_url = document.URL.split("/");
+        //     let relevant_URL = full_url[full_url.length-1];
+        //     this.leagueURL = "/fixtures/json/" + relevant_URL;
+        //     // console.log(`Fetching from ${this.leagueURL}`)
+        // },
+
+        getStrapiCookie(){
+            // Reads the cookies in local storage, 
+            let name = "nebb_jwt_token=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    console.log(`Cookie found: ${c.substring(name.length, c.length)}`)
+                return c.substring(name.length, c.length);
+                }
+            }
+            console.log("no cookie found")
+            return "";
         },
 
         checkDifferences(game, index){
@@ -203,8 +222,13 @@ var mainVueApp = {
             //Update the "sent" flag to update the UI
             console.log("sendNewGames()");
         },
+        resetAll(){
+            //Send new fixtures to the server
+            //Update the "sent" flag to update the UI
+            console.log("Reset all games");
+        },
         
-        //TODO
+        // TODO: Fixture Update Review Modal
         // Pop up a modal
         // Display fixture review screen
         // When user sends clicks send, start sending and update UI to show send/failed/pending

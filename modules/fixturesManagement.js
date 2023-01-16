@@ -42,7 +42,7 @@ async function getLeagues(){
                 }
           });
 
-          console.log(leagues);
+      //     console.log(leagues);
 
           // Return the list of leagues and groupings
           return {leagues, groupings};
@@ -67,8 +67,14 @@ async function getLeagueObject(leagueURL){
       //OUTPUT
       // <league> object
 
-      //Initialise league object with fail flag
-      let league = {"success": false};
+      //Initialise empty league object with fail flag
+      let league = {
+            "id": 0,
+            "league": "none",
+            "games": [],
+            "teams": [],
+            "success": false
+      }
 
       // let _fixtures = Promise.resolve(getFixtures(leagueURL));
       // let _teams = Promise.resolve(getTeams(leagueURL));
@@ -244,8 +250,14 @@ async function getFixtures(leagueURL){
             // console.log(_fixtures[0]);
             
             // Use the first fixture to grab the name and ID of the league
-            let leagueName = _fixtures[0].attributes.league.data.attributes.name;
-            let leagueId = _fixtures[0].id;
+            // If there is a first game, that is. The league might be empty in the preseason
+            let leagueName = "Unpopulated League";
+            let leagueId = 0;
+            
+            if(_fixtures.length > 0){
+                  leagueName = _fixtures[0].attributes.league.data.attributes.name;
+                  leagueId = _fixtures[0].id;
+            }
 
             _fixtures.forEach(element => {
 
