@@ -287,9 +287,9 @@ var mainVueApp = {
             Promise.all(deletedGames)
             .then(deletedGames_resolved => {
                 // Now that we have responses for all our DELETEs, check how many were actually successful
-                for( i = 0; i < deletedGames_resolved.length; i ++){
-                    if 
-                }
+                // for( i = 0; i < deletedGames_resolved.length; i ++){
+                //     if 
+                // }
             })
 
 
