@@ -9,15 +9,13 @@ var mainVueApp = {
         leagueID: 0,
         games_new:[],
         modified: false,
-        strapi_cookie: null,
+        strapi_cookie: "test",
 
     }),
   
     created() {
-      // fetch on init
-      
-      strapi_cookie = this.getStrapiCookie();
-    //   this.fetchData();
+      // TODO: Figure out why the cookie is being set to null after setting
+      this.strapi_cookie = this.getStrapiCookie();
         Promise.resolve(this.fetchLeagues())
         .then((r) => {console.log("Vue mounted")});
     },
@@ -165,14 +163,16 @@ var mainVueApp = {
             let name = "nebb_jwt_token=";
             let decodedCookie = decodeURIComponent(document.cookie);
             let ca = decodedCookie.split(';');
+
             for(let i = 0; i <ca.length; i++) {
+
                 let c = ca[i];
                 while (c.charAt(0) == ' ') {
-                c = c.substring(1);
+                    c = c.substring(1);
                 }
                 if (c.indexOf(name) == 0) {
-                    console.log(`Cookie found: ${c.substring(name.length, c.length)}`)
-                return c.substring(name.length, c.length);
+                    let cookie = c.substring(name.length, c.length)
+                    return cookie;
                 }
             }
             console.log("no cookie found")
@@ -277,7 +277,7 @@ var mainVueApp = {
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${this.strapi_cookie}`,
+                            "Authorization": `Bearer ${this.getStrapiCookie()}`,
 
                         }
                     })
@@ -288,21 +288,34 @@ var mainVueApp = {
             .then(deletedGames_resolved => {
                 // Now that we have responses for all our DELETEs, check how many were actually successful
                 for( i = 0; i < deletedGames_resolved.length; i ++){
-                    if 
+                    if (deletedGames_resolved[i].ok){
+                        console.log(`Deleted Fixture ${deletedGames_resolved[i].id}`);
+                        deleted++;
+                    }
+                    else {
+                        // If a fixture fails to be deleted, throw an alert to the user with the 
+                        // fixture ID that failed to delete. 
+                        console.log("Deletion Failed");
+                        console.log(deletedGames_resolved[i]);
+                        window.alert(`Failed to delete Fixture ${deletedGames_resolved[i].id}`)
+                    }
                 }
+
+                window.alert(`Deleted ${deleted} fixtures`)
             })
 
 
-            // If a fixture fails to be deleted, throw an alert to the user with the 
-            // fixture ID that failed to delete. 
 
             //When finished, Print succesful number of deletes to console
-            console.log("deleteFixtureFromServer()");
+            console.log(`Deleted ${deleted} fixtures`);
         },
         POSTnewFixtures(){
             //Send new fixtures to the server
-            //Update the "sent" flag to update the UI
-            console.log("sendNewGames()");
+            console.log("POSTnewFixtures()");
+        },
+        PUTupdatedFixtures(){
+            //Send updates to the server
+            console.log("PUTupdatedFixtures()");
         },
 
     }
