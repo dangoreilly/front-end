@@ -6,7 +6,7 @@ async function getLeagues(){
     // GETs all leagues
     // Returns array of all leagues
 
-    let requestAddress =  process.env.STRAPI + `api/leagues?sort=name`
+    let requestAddress =  process.env.STRAPI + `/api/leagues?sort=name`
 
     try{
           // Use the requestAddress to get team list from CMS
@@ -190,7 +190,7 @@ async function getTeams(leagueURL){
       // FILTER: for the league with the matching URL
       // POPULATE[TEAMS]: Include data about the related teams
       // POPULATE[1]=CLUB: For each team, include data about the related club
-      let requestAddress =  process.env.STRAPI + `api/leagues?filters[url][$eq]=${leagueURL}&populate[teams][populate][1]=club`
+      let requestAddress =  process.env.STRAPI + `/api/leagues?filters[url][$eq]=${leagueURL}&populate[teams][populate][1]=club`
 
       try{
             // Use the requestAddress to get team list from CMS
@@ -236,7 +236,7 @@ async function getFixtures(leagueURL){
       // Returns object of all matching fixtures, league name, and 'Success' flag
       // Success = true if array size is greater than 0
 
-      let requestAddress =  process.env.STRAPI + `api/fixtures?filters[league][url][$eq]=${leagueURL}&populate=*&pagination[pageSize]=100&sort=Date%3Aasc`
+      let requestAddress =  process.env.STRAPI + `/api/fixtures?filters[league][url][$eq]=${leagueURL}&populate=*&pagination[pageSize]=100&sort=Date%3Aasc`
       // console.log(requestAddress)
 
       try{
