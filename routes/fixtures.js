@@ -10,7 +10,7 @@ const dotenv = require('dotenv').config();
 const nebb = require('../modules/fixturesManagement.js');
 
 let token = process.env.STRAPI_BEARER;
-let auth_path = process.env.STRAPI + "api/auth/local";
+let auth_path = process.env.STRAPI + "/api/auth/local";
 
 
 //////////////////////////////////
@@ -151,24 +151,26 @@ router.get('/', function(req, res, next) {
 });
 
 // Route for fixtures secretary to manage fixtures
-router.get('/edit/', 
+router.get('/edit/', function(req, res) {
 
-      //Check STRAPI to see if this user is allowed make edits
-                  //TODO: Integrate actual login page
-      passport.authenticate('basic', { session: false }),
-      function(req, res) {
+            // console.log(req.cookies);
+            let user_jwt = "";
 
-            //If the user has permissions, STRAPI will give us a jwt token 
-            let user_jwt = req.user;
-
+            //Check the user doesn't already have a cookie 
+            if (req.cookies.nebb_jwt_token){
+                  user_jwt = req.cookies.nebb_jwt_token;
+            }
+            else {
+                  //If they don't have a cookie, then send them to strapi for login
+                  console.log(`Redirecting to ${process.env.STRAPI + "/api/connect/google"}`)
+                  res.redirect(process.env.STRAPI + "/api/connect/google");
+                  return 200;
+            }
             // Prepare the edit page to send
             // We're not rendering this one, because rendering it client side with Vue
             // is more powerful, and we don't care about SEO on this page
             fileName = "fixtures-edit-vue.html";
             options = { root: "public/pages"};
-
-            // Send the jwt token to use client side
-            res.cookie("nebb_jwt_token", user_jwt);
 
             // And send the page
             res.sendFile(fileName, options, function (err) {

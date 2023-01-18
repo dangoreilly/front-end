@@ -15,6 +15,7 @@ var fixturesRouter = require('./routes/fixtures');
 var standingsRouter = require('./routes/standings');
 var blogRouter = require('./routes/blog');
 var apiRouter = require('./routes/api');
+var authRouter = require('./routes/connect');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use('/json', apiRouter);
 app.use('/fixtures', fixturesRouter);
 app.use('/standings', standingsRouter);
 app.use('/blog', blogRouter);
+app.use('/connect', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
