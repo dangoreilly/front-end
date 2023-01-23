@@ -89,14 +89,22 @@ async function getLeagueObject(leagueURL){
             // console.log("Fixtures: ", f.success);
             // console.log("Teams: ", t.success)
             
-            if (f.success && t.success){
+            if (f.success || t.success){
 
                   // If we have both a list of clubs matched to teams 
-                  // and a list of games w/ the teams, we can match them for rendering later 
-                  let games = matchClubsAndTeams(f.games, t.teams);
+                  // or a list of games w/ the teams, we can match them for rendering later
+                  // The only time we will ever have one without the other is in preseason
+                  // But we still need the league object to be sent to the management portal
+                  let games = []
+
+                  if (f.success){
+                        // If the fixtures object exists, match up the clubs
+                        // else, we're just going to send an empty array
+                        games = matchClubsAndTeams(f.games, t.teams);
+                  }
 
                   league = {
-                        "id": f.id,
+                        "id": f.id || t.leagueId, // One of them has to exist for us to get this far
                         "league": f.league,
                         "games": games,
                         "teams": t.teams,
@@ -107,7 +115,7 @@ async function getLeagueObject(leagueURL){
             }
 
       // });
-      // console.log(league);
+      // console.log(f);
       return league;
 }
 
@@ -201,6 +209,11 @@ async function getTeams(leagueURL){
             let teams = [];
             let _teams = response.data.data[0].attributes.teams.data;
 
+            if(_teams.length > 0){
+                  leagueName = _teams[0].attributes.league.data.attributes.name;
+                  leagueId = _teams[0].id;
+            }
+
             _teams.forEach(element => {
 
                   let attribs = element.attributes;
@@ -218,6 +231,7 @@ async function getTeams(leagueURL){
 
             // Return an object with both games and the league name to be consumed by the view engine
             return responseObject= {
+                  leagueId,
                   "teams": teams,
                   "success": teams.length > 0
             };
