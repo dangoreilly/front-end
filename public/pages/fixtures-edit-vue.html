@@ -128,7 +128,13 @@
                 style="padding: left 2rem;"
                 > <!-- Report to user what changes are actually going to be made -->
                     Fixtures Modified 
-                    <span v-if="modifiedCount > 0" class="badge bg-primary">{{modifiedCount}}</span>
+                    <span 
+                    :class="{
+                        'badge bg-primary': modifiedCount > 0,
+                        'badge bg-secondary': modifiedCount = 0
+                    }">
+                        {{modifiedCount}}
+                    </span>
                     <span v-else class="badge bg-secondary">{{modifiedCount}}</span> 
                     Marked for Deletion 
                     <span v-if="deletedCount > 0" class="badge bg-danger">{{deletedCount}}</span>
@@ -141,7 +147,7 @@
                 <table class="table table-striped table-hover" id="fixturesTable-edit">
                     <thead class="table-dark">
                         <tr>
-                        <!-- <th scope="col">ID</th> -->
+                        <th scope="col">ID</th>
                         <th scope="col">Date</th>
                         <th scope="col">Home Team</th>
                         <th scope="col">Home<br> Points</th>
@@ -185,6 +191,11 @@
                             'table-success': game.modified
                         }"
                         >
+                            <!-- ID -->
+                            <td>
+                               {{game.id}}
+                            </td> 
+
                             <!-- Date -->
                             <td 
                             :class="{
