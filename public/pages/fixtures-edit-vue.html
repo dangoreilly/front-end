@@ -105,11 +105,15 @@
                             <br>
                                 <i class="bi bi-square-fill" style="color: #eccccf; font-size:x-large;"></i> 
                                 Fixtures marked for deletion are highlighted in red
-                            <!-- <p><i class="bi bi-square-fill" style="color: rgb(199, 219, 210);"></i> Edited fixtures are highlighted in green</p> -->
+                            <br>
+                                <i class="bi bi-square-fill" style="color: #198754; font-size:x-large;"></i>
+                                The green button adds a new blank fixture
                         </div>
                         <!-- What the buttons do -->
                         <div class="col">
-                            
+                            <p>"Date", "Home Team" and "Away Team" are mandatory fields</p>
+                            <p>All other fields are optional.</p>
+                            <p>All updates (additions, modifications, deletions) are sent when the "Update" button is clicked</p>
                         </div>
                     </div>
                     </div>
@@ -167,6 +171,7 @@
                         <th scope="col">Away Team</th>
                         <th scope="col">Away<br> Points</th>
                         <th scope="col">Away<br> Score</th>
+                        <th scope="col" alt="Optional">Public Note</th>
                         <th scope="col">
                             <div class="d-grid gap-2 col-2">
                                 <button  
@@ -227,11 +232,19 @@
                             </td> 
 
                             <!-- Venue -->
-                            <td>
+                            <td 
+                            :class="{
+                                'border border-danger table-info': 
+                                game.venue != games_clean[index].venue &&
+                                !game.deleted
+                            }"
+                            >
                                 <input 
                                 class="form-control" 
                                 type="text" 
-                                v-model="game.venue">
+                                v-model="game.venue"
+                                :title="games_clean[index].venue"
+                                >
                             </td> 
                             
                             <!-- Home Team -->
@@ -342,6 +355,23 @@
                                 >
                             </td>
 
+                            <!-- Note -->
+                            <td 
+                            :class="{
+                                'border border-danger table-info': 
+                                game.publicNote != games_clean[index].publicNote &&
+                                !game.deleted
+                            }"
+                            >
+                                <input 
+                                class="form-control" 
+                                type="text" 
+                                v-model="game.publicNote"
+                                :title="games_clean[index].publicNote"
+                                >
+                            </td> 
+                                
+
                             <!-- Delete Button -->
                             <td>
                                 <div class="d-grid gap-2 col-2">
@@ -402,6 +432,14 @@
                                 type="date" 
                                 style="width: 9rem;" 
                                 >
+                            </td> 
+
+                            <!-- Venue -->
+                            <td>
+                                <input 
+                                class="form-control" 
+                                type="text" 
+                                v-model="game.venue">
                             </td> 
                             
                             <!-- Home Team -->
@@ -476,6 +514,14 @@
                                 v-model="game.awayScore"
                                 >
                             </td>
+
+                            <!-- Note -->
+                            <td>
+                                <input 
+                                class="form-control" 
+                                type="text" 
+                                v-model="game.publicNote">
+                            </td> 
 
                             <!-- Delete Button -->
                             <td>

@@ -164,7 +164,7 @@ function getClubForTeam(searchTeam, teams){
 
 
       //If no match is found, just call the club unknown
-      let searchResult = {"teamName": searchTeam, "clubName": "unknown"};;
+      let searchResult = {"teamName": searchTeam, "clubName": "unknown"};
 
       teams.forEach(t => {
 
@@ -296,11 +296,12 @@ async function getFixtures(leagueURL){
                         //       let parts =this.date.split("/");
                         //       return `${parts[2]}-${parts[1]}-${parts[0]}`
                         // },
-                        "venue": attribs.venue || "?",
-                        "homeTeam": attribs.team.data ? attribs.team.data.attributes.Name : "-",
+                        "venue": attribs.venue || "",
+                        "publicNote": attribs.publicNote || "",
+                        "homeTeam": attribs.team.data ? attribs.team.data.attributes.Name : "?",
                         "homeScore": attribs.homeTeamScore || 0,
                         "homePoints": attribs.homeTeamPointsAwarded || 0,
-                        "awayTeam": attribs.awayTeam.data ? attribs.awayTeam.data.attributes.Name : "-",
+                        "awayTeam": attribs.awayTeam.data ? attribs.awayTeam.data.attributes.Name : "?",
                         "awayScore": attribs.awayTeamScore || 0,
                         "awayPoints": attribs.awayTeamPointsAwarded || 0,
                         "homeWin": attribs.homeTeamScore > attribs.awayTeamScore,  // Quick check for the winner

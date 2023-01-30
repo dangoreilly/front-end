@@ -492,7 +492,8 @@ var mainVueApp = {
                     "posted": true,
                     "team": f.homeTeam.id,
                     "awayTeam": f.awayTeam.id,
-                    "league" : this.currentLeague.id
+                    "league" : this.currentLeague.id,
+                    "publicNote": f.publicNote || null
                 }
             }
         }
