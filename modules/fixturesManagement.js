@@ -97,14 +97,14 @@ async function getLeagueObject(leagueURL){
                   // But we still need the league object to be sent to the management portal
                   let games = []
 
-                  if (f.success){
+                  if (f.success && t.success){
                         // If the fixtures object exists, match up the clubs
                         // else, we're just going to send an empty array
                         games = matchClubsAndTeams(f.games, t.teams);
                   }
 
                   league = {
-                        "id": f.id || t.leagueId, // One of them has to exist for us to get this far
+                        "id": t.leagueId, 
                         "league": f.league,
                         "games": games,
                         "teams": t.teams,
@@ -208,24 +208,34 @@ async function getTeams(leagueURL){
             // We want to transform the data from the CMS to make it a bit cleaner first
             let teams = [];
             let _teams = response.data.data[0].attributes.teams.data;
+            // console.log(response.data.data[0])
 
-            if(_teams.length > 0){
-                  leagueName = _teams[0].attributes.league.data.attributes.name;
-                  leagueId = _teams[0].id;
+            leagueId = response.data.data[0].id;
+
+            try{
+
+                _teams.forEach(element => {
+
+                    let attribs = element.attributes;
+
+                    let id = element.id;
+                    let teamName = attribs.Name;
+                    let clubName = attribs.club.data.attributes.Name;
+
+                    //Pair the teamName and ClubName into an objectm and add to the list
+                    teams.push({id, teamName, clubName});
+                    
+                });
             }
-
-            _teams.forEach(element => {
-
-                  let attribs = element.attributes;
-
-                  let id = element.id;
-                  let teamName = attribs.Name;
-                  let clubName = attribs.club.data.attributes.Name;
-
-                  //Pair the teamName and ClubName into an objectm and add to the list
-                  teams.push({id, teamName, clubName});
-                  
-            });
+            catch(e){
+                console.error("No teams found for this league");
+                // Create a dummy team to let the page render
+                teams.push({
+                    "id": 0, 
+                    "teamName": 'null', 
+                    "clubName": 'null'
+                });
+            }
 
             // console.log(teams);
 
@@ -280,17 +290,17 @@ async function getFixtures(leagueURL){
                   let fixtureInfo = 
                   {
                         "id":element.id,
-                        "ISO_date": attribs.Date,
+                        "ISO_date": attribs.Date || 0,
                         "date":parseDate(attribs.Date),
                         // "parsedDate": function(){
                         //       let parts =this.date.split("/");
                         //       return `${parts[2]}-${parts[1]}-${parts[0]}`
                         // },
                         // "homeClub": "East Coast Cavaliers",
-                        "homeTeam": attribs.team.data.attributes.Name,
+                        "homeTeam": attribs.team.data ? attribs.team.data.attributes.Name : "-",
                         "homeScore": attribs.homeTeamScore || "-",
                         "homePoints": attribs.homeTeamPointsAwarded || "-",
-                        "awayTeam": attribs.awayTeam.data.attributes.Name,
+                        "awayTeam": attribs.awayTeam.data ? attribs.awayTeam.data.attributes.Name : "-",
                         "awayScore": attribs.awayTeamScore || "-",
                         "awayPoints": attribs.awayTeamPointsAwarded || "-",
                         "homeWin": attribs.homeTeamScore > attribs.awayTeamScore,  // Quick check for the winner
