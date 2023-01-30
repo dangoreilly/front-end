@@ -296,15 +296,15 @@ async function getFixtures(leagueURL){
                         //       let parts =this.date.split("/");
                         //       return `${parts[2]}-${parts[1]}-${parts[0]}`
                         // },
-                        // "homeClub": "East Coast Cavaliers",
+                        "venue": attribs.venue || "?",
                         "homeTeam": attribs.team.data ? attribs.team.data.attributes.Name : "-",
-                        "homeScore": attribs.homeTeamScore || "-",
-                        "homePoints": attribs.homeTeamPointsAwarded || "-",
+                        "homeScore": attribs.homeTeamScore || 0,
+                        "homePoints": attribs.homeTeamPointsAwarded || 0,
                         "awayTeam": attribs.awayTeam.data ? attribs.awayTeam.data.attributes.Name : "-",
-                        "awayScore": attribs.awayTeamScore || "-",
-                        "awayPoints": attribs.awayTeamPointsAwarded || "-",
+                        "awayScore": attribs.awayTeamScore || 0,
+                        "awayPoints": attribs.awayTeamPointsAwarded || 0,
                         "homeWin": attribs.homeTeamScore > attribs.awayTeamScore,  // Quick check for the winner
-                        "posted": attribs.homeTeamPointsAwarded + attribs.awayTeamPointsAwarded > 0,  // If points were awarded to either team, then the fixture should be displayed
+                        "posted": attribs.homeTeamPointsAwarded + attribs.awayTeamPointsAwarded != 0,  // If points were awarded to either team, then the fixture should be displayed
                         "pastDue": attribs.Date < Date.now() && !this.posted // Flag for seeing if the fixture is in the past, but hasn't been updated
                   }
                   // console.log(fixtureInfo);

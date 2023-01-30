@@ -160,6 +160,7 @@
                         <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Venue</th>
                         <th scope="col">Home Team</th>
                         <th scope="col">Home<br> Points</th>
                         <th scope="col">Home<br> Score</th>
@@ -223,6 +224,14 @@
                                 :title="games_clean[index].date"
                                 required
                                 >
+                            </td> 
+
+                            <!-- Venue -->
+                            <td>
+                                <input 
+                                class="form-control" 
+                                type="text" 
+                                v-model="game.venue">
                             </td> 
                             
                             <!-- Home Team -->

@@ -231,6 +231,7 @@ var mainVueApp = {
             let gc = this.games_clean;
 
             if(game.ISO_date != gc[index].ISO_date) return true;
+            if(game.venue != gc[index].venue) return true;
             if(game.homeTeam.teamName != gc[index].homeTeam.teamName) return true;
             if(game.homeScore != gc[index].homeScore) return true;
             if(game.homePoints != gc[index].homePoints) return true;
@@ -269,6 +270,7 @@ var mainVueApp = {
             //Add a new fixture, held in a different array
             let newFixture = {
                 "ISO_date": null,
+                "venue": null,
                 "homeTeam": {
                     "clubName": null,
                     "teamName": null
@@ -482,6 +484,7 @@ var mainVueApp = {
             return {
                 "data": {
                     "Date": f.ISO_date,
+                    "venue": f.venue,
                     "homeTeamScore": f.homeScore,
                     "awayTeamScore": f.awayScore,
                     "awayTeamPointsAwarded": f.awayPoints,
