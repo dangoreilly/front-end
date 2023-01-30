@@ -298,6 +298,7 @@ async function getFixtures(leagueURL){
                         // },
                         "venue": attribs.venue || "",
                         "publicNote": attribs.publicNote || "",
+                        "publicNoteExists": attribs.publicNote != "",
                         "homeTeam": attribs.team.data ? attribs.team.data.attributes.Name : "?",
                         "homeScore": attribs.homeTeamScore || 0,
                         "homePoints": attribs.homeTeamPointsAwarded || 0,

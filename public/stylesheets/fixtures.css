@@ -13,6 +13,24 @@
     }
 }
 
+@media screen and (min-width: 510px) {
+    .nomobile {
+        display: table-cell;
+    }
+    .mobileonly {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 510px) {
+    .nomobile {
+        display: none !important;
+    }
+    .mobileonly {
+        display: block;
+    }
+}
+
 .b-example-divider {
     height: 3rem;
     background-color: rgba(0, 0, 0, .1);
