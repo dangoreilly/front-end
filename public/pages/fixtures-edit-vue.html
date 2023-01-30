@@ -119,7 +119,7 @@
                 <button 
                 class="btn btn-warning mb-3" 
                 id="submit_button" 
-                :disabled="!changesMade"
+                :disabled="!(changesMade && updateValid)"
                 @click="sendUpdates()"
                 >
                     Update
@@ -131,17 +131,28 @@
                     <span 
                     :class="{
                         'badge bg-primary': modifiedCount > 0,
-                        'badge bg-secondary': modifiedCount = 0
+                        'badge bg-secondary': modifiedCount == 0
                     }">
                         {{modifiedCount}}
                     </span>
-                    <span v-else class="badge bg-secondary">{{modifiedCount}}</span> 
+                    
                     Marked for Deletion 
-                    <span v-if="deletedCount > 0" class="badge bg-danger">{{deletedCount}}</span>
-                    <span v-else class="badge bg-secondary">{{deletedCount}}</span> 
+                    <span 
+                    :class="{
+                        'badge bg-danger': deletedCount > 0,
+                        'badge bg-secondary': deletedCount == 0
+                    }">
+                        {{deletedCount}}
+                    </span>
+                    
                     New Fixtures Added
-                    <span v-if="newFixturesCount > 0" class="badge bg-success">{{newFixturesCount}}</span>
-                    <span v-else class="badge bg-secondary">{{newFixturesCount}}</span> 
+                    <span 
+                    :class="{
+                        'badge bg-success': newFixturesCount > 0,
+                        'badge bg-secondary': newFixturesCount == 0
+                    }">
+                        {{newFixturesCount}}
+                    </span>
                 </span>
 
                 <table class="table table-striped table-hover" id="fixturesTable-edit">
@@ -225,7 +236,8 @@
                                 class="form-select" 
                                 aria-label="Team Select" 
                                 v-model="game.homeTeam.teamName"  
-                                :title="games_clean[index].homeTeam.teamName"
+                                :title="games_clean[index].homeTeam.teamName" 
+                                @change="reconcileTeams(game)"
                                 >
                                     <option 
                                     v-for="team in teams"
@@ -278,8 +290,8 @@
                                 class="form-select" 
                                 aria-label="Team Select" 
                                 v-model="game.awayTeam.teamName"
-                                :title="games_clean[index].awayTeam.teamName"
-                                required
+                                :title="games_clean[index].awayTeam.teamName" 
+                                @change="reconcileTeams(game)"
                                 >
                                     <option 
                                     v-for="team in teams"
@@ -367,6 +379,12 @@
                         v-for="(game, index) in games_new"
                         class="table-warning"
                         >
+                            <!-- Valid yet? -->
+                            <td>
+                                <i v-if="game.valid" class="bi bi-check-circle-fill"></i>
+                                <i v-else class="bi bi-exclamation-circle" alt="Missing Fields"></i>
+                            </td> 
+
                             <!-- Date -->
                             <td>
                                 <input 
@@ -382,7 +400,8 @@
                                 <select 
                                 class="form-select" 
                                 aria-label="Team Select" 
-                                v-model="game.homeTeam.teamName"  
+                                v-model="game.homeTeam.teamName" 
+                                @change="reconcileTeams(game)" 
                                 >
                                     <option 
                                     v-for="team in teams"
@@ -418,8 +437,8 @@
                                 <select 
                                 class="form-select" 
                                 aria-label="Team Select" 
-                                v-model="game.awayTeam.teamName"
-                                required
+                                v-model="game.awayTeam.teamName" 
+                                @change="reconcileTeams(game)"
                                 >
                                     <option 
                                     v-for="team in teams"
