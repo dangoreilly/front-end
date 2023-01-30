@@ -266,7 +266,7 @@ var mainVueApp = {
         },
 
         addNewFixture(){
-            //Add a new fixture, held in a different 
+            //Add a new fixture, held in a different array
             let newFixture = {
                 "ISO_date": null,
                 "homeTeam": {
@@ -361,7 +361,7 @@ var mainVueApp = {
 
                 if (deletedGames[i].ok){
                     console.log(`Deleted Fixture ${toBeDeleted[i].id}`);
-                    Modifed++;
+                    deleted++;
                 }
                 else {
                     // If a fixture fails to be deleted, throw an alert to the user with the 
@@ -431,8 +431,48 @@ var mainVueApp = {
             console.log(`${timestamp}: Modified ${Modifed} fixtures`);
         },
         async POSTnewFixtures(){
-            //Send new fixtures to the server
-            console.log("POSTnewFixtures()");
+            //Send new fixtures to the server         
+            
+            let uploadedFixtures = [];
+
+            let uploaded = 0;
+
+            // Use fetch to POST every game in the games_new list
+            // Collect the responses in a new array
+            for( i = 0; i < this.games_new.length; i++){
+                //TODO: Update Strapi Link
+                uploadedFixtures[i] = await fetch(
+                    `${this.STRAPI_BASE_URL}/api/fixtures/`, 
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${this.getStrapiCookie()}`,
+
+                        },
+                        // Package up the fixture for sending to be compliant with 
+                        // Strapi schema
+                        body: JSON.stringify(this.packageFixture(this.games_new[i]))
+                    }
+                )
+                
+                if (uploadedFixtures[i].ok){
+                    uploaded++;
+                    console.log(`Uploaded New Fixture ${i}`);
+                }
+                else {
+                    // If a fixture fails to be deleted, throw an alert to the user with the 
+                    // fixture ID that failed to delete. 
+                    console.log(`POST Failed - ${i}`);
+                }
+
+            }
+
+            //When finished, Print succesful number of uploads
+            window.alert(`Uploaded ${uploaded} fixtures`)
+            let timestamp = new Date(Date.now()).toISOString()
+            console.log(`${timestamp}: Uploaded ${uploaded} fixtures`);
         },
 
         packageFixture(f){
@@ -448,7 +488,8 @@ var mainVueApp = {
                     "homeTeamPointsAwarded": f.homePoints,
                     "posted": true,
                     "team": f.homeTeam.id,
-                    "awayTeam": f.awayTeam.id
+                    "awayTeam": f.awayTeam.id,
+                    "league" : this.currentLeague.id
                 }
             }
         }
