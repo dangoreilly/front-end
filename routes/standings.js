@@ -131,7 +131,7 @@ router.get('/:league', function(req, res, next) {
     let _league = Promise.resolve(nebb.getLeagueObject(leagueURL))
     .then((fixtures) => {
 
-        let standings = nebb.calculatePoints(fixtures);dfx
+        let standings = nebb.calculatePoints(fixtures);
     
         if (fixtures.success){
 
