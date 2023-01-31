@@ -106,6 +106,7 @@ async function getLeagueObject(leagueURL){
                   league = {
                         "id": t.leagueId, 
                         "league": f.league,
+                        "leagueURL": f.leagueURL,
                         "games": games,
                         "teams": t.teams,
                         "success": true
@@ -319,6 +320,7 @@ async function getFixtures(leagueURL){
             let responseObject= {
                   "id": leagueId,
                   "league": leagueName,
+                  leagueURL,
                   "games": fixtures,
                   "success": fixtures.length > 0
             };
@@ -335,4 +337,108 @@ async function getFixtures(leagueURL){
       }
 }
 
-module.exports = {getLeagues, getLeagueObject, getTeams, getFixtures}
+function calculatePoints(league){
+    // Given a league object
+    // Calcuate the points for each team
+    // Return an array of objects 
+    //{ team, points, played, wins, losses }
+
+
+    // UI is expecting this fingerprint
+    /*
+    "league": "U18 Boys (B)",
+    "leagueID": league,
+    "teams": [
+        {
+            "team":"East Cavan Eagles",
+            "played":3,
+            "won": 3,
+            "lost": 0,
+            "points": 9
+        }
+    ]
+    */
+
+    let returnLeagueObject = {
+        "leagueName": league.league,
+        "leagueID": league.id,
+        "leagueURL": league.leagueURL,
+        "teams": []
+    }
+
+    //Generate an object of all teams with their stats set to 0
+    for(i = 0; i < league.teams.length; i++){
+    
+        returnLeagueObject.teams.push({
+            "team":league.teams[i].teamName,
+            "club": league.teams[i].clubName,
+            "teamID": league.teams[i].id,
+            "played":0,
+            "won": 0,
+            "lost": 0,
+            "points": 0
+        })
+    
+    }
+
+
+    // Loop through all the games
+    for(i = 0; i < league.games.length; i++){
+
+        let currentGame = league.games[i]
+
+        // Get index of homeTeam
+        let homeTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.homeTeam.id)
+        // Get index of awayTeam
+        let awayTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.awayTeam.id)
+
+        // Increment homeTeam playCount
+        returnLeagueObject.teams[homeTeamIndex].played += 1;
+        // Increment awayTeam playCount
+        returnLeagueObject.teams[awayTeamIndex].played += 1;
+
+        // Check if this is a homeWin
+        if (currentGame.homeWin){
+            // increment homeTeam winCount
+            returnLeagueObject.teams[homeTeamIndex].won += 1;
+            // increment awayTeam lossCount
+            returnLeagueObject.teams[awayTeamIndex].lost += 1;
+        }
+        else{ 
+            // increment homeTeam lossCount
+            returnLeagueObject.teams[homeTeamIndex].lost += 1;
+            // increment awayTeam winCount
+            returnLeagueObject.teams[awayTeamIndex].win += 1;
+        } 
+            
+        
+            
+        // Add homePoints to homeTeam points
+        returnLeagueObject.teams[homeTeamIndex].points += currentGame.homePoints;
+        // Add awayPoints to awayTeam points
+        returnLeagueObject.teams[homeTeamIndex].points += currentGame.awayPoints;
+
+    }
+
+    //return the object with team stats
+    return returnLeagueObject;
+
+}
+
+function getTeamIndexFromID(teams, id){
+    // Takes in an array of team objects and an id
+    // Returns the index of the team with the corresponding index
+
+    for (i = 0; i < teams.length; i++){
+
+        if (teams[i].teamID == id) return i;
+
+    }
+
+    //If we get this far, something has gone horribly wrong
+    console.error(`getTeamIndexFromID: Team not found with id ${id}`)
+    return -1
+
+}
+
+module.exports = {getLeagues, getLeagueObject, getTeams, getFixtures, calculatePoints}

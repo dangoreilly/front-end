@@ -1,16 +1,14 @@
 var express = require('express');
 var router = express.Router();
+const nebb = require('../modules/fixturesManagement.js');
 // const axios = require('axios');
 // const dotenv = require('dotenv').config();
 
-// let token = process.env.STRAPI_BEARER;
+//////////////////////////////////
+/*
+//For testing rendering
 
-// const config = {
-//   headers: { Authorization: `Bearer ${token}` }
-// };
-
-router.get('/', function(req, res, next) {
-      var leagues = {
+var leagues = {
             "boysJuvenile":[            
                   {"name":"U12 Boys (A)", "id":"u12-boys-a"},
                   {"name":"U12 Boys (B)", "id":"u12-boys-b"},
@@ -38,11 +36,6 @@ router.get('/', function(req, res, next) {
                   {"name":"Mens Masters", "id":"mens-masters"}
             ]
       };
-
-      res.render('standings-index', {leagues}); 
-});
-
-router.get('/:league', function(req, res, next) {
 
       let league = req.params.league;
 
@@ -95,9 +88,64 @@ router.get('/:league', function(req, res, next) {
             ]
       }
 
+*/
+//////////////////////////////////
 
-      res.render('standings', {standings});
-      // res.render('index');
+router.get('/', function(req, res, next) {
+      
+    // Separate them into our three groupings
+    // Manually for now, because we have a preferred render order that is nontrivial to 
+    // define programmatically: Girls, Boys, Senior
+    let leagues = {
+          girlsJuvenile: [],
+          boysJuvenile: [],
+          senior: []
+    }
+
+    // Grab the list of leagues
+    Promise.resolve(nebb.getLeagues())
+    .then((_leagues) => {
+
+        _leagues.leagues.forEach(lg => {
+
+            if(lg.grouping == "Juvenile Girls")
+                leagues.girlsJuvenile.push(lg);
+
+            else if(lg.grouping == "Juvenile Boys")
+                leagues.boysJuvenile.push(lg);
+
+            else if(lg.grouping == "Senior")
+                leagues.senior.push(lg);
+
+        });
+
+        res.render('standings-index', {leagues}); 
+
+    })
+});
+
+router.get('/:league', function(req, res, next) {
+
+    let leagueURL = req.params.league;
+
+    let _league = Promise.resolve(nebb.getLeagueObject(leagueURL))
+    .then((fixtures) => {
+
+        let standings = nebb.calculatePoints(fixtures);dfx
+    
+        if (fixtures.success){
+
+            res.render('standings', {standings});
+
+        }
+        else {
+            res.render('error-leaguenotfound', {contactMail: "info@nebb.ie"});
+        }    
+
+    })
+
+    
+    // res.render('index');
 
 });
 
