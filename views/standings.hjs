@@ -46,7 +46,7 @@
 
     <main>
 
-        <div class="container py-4 ">
+        <div class="container py-4 container-sm" style="max-width: 1000px;">
             <header class="pb-3 mb-4 border-bottom">
                 <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                     <img src="../images/logo.png" width="40" height="32" class="me-2"></img>
@@ -68,17 +68,28 @@
             <div class="p-5 mb-4 bg-light rounded-3 splash">
                 <div class="container-fluid py-5">
                     <div class="splash-text">
-                        <h1 class="display-5 fw-bold">League Standings</h1>
-                        <p class="col-md-8 fs-4">{{standings.league}} </p>
+                        <h1 class="display-5 fw-bold">{{standings.leagueName}}</h1>
+                        <p class="col-md-8 fs-4">League Standings</p>
                     </div>
                 </div>
             </div>
 
             <div class="p-2 mb-4 bg-light rounded-1">
+            <nav class="navbar navbar-text bg-light rounded-1">
+                <div class="container border-3 border-dark">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../">Home</a></li>
+                            <li class="breadcrumb-item"><a href="./">Standings</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{standings.leagueName}}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </nav>
 
-                <p>Standings for the {{standings.league}} league are listed below. {{!-- The current <i>Top Four</i> have been highlighted. --}} </p>
+                <!-- <p>Standings for the {{standings.league}} league are listed below. The current <i>Top Four</i> have been highlighted. </p> -->
                 <p>Please note that it can take up to a week from a game being played to its scoresheet being processed. 
-                    To see a list of all processed games for this league, check the <a href="..fixtures/{{standings.leagueID}}">fixtures page</a>
+                    To see a list of all processed games for this league, check the <a href="../fixtures/{{standings.leagueURL}}">fixtures page</a>
                 </p>
                 
 

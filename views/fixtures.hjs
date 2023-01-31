@@ -46,7 +46,7 @@
 
     <main>
 
-        <div class="container py-4 ">
+        <div class="container py-4">
             <header class="pb-3 mb-4 border-bottom">
                 <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                     <img src="/images/logo.png" width="40" height="32" class="me-2"></img>
@@ -68,8 +68,8 @@
             <div class="p-5 mb-4 bg-light rounded-3 splash">
                 <div class="container-fluid py-5">
                     <div class="splash-text">
-                        <h1 class="display-5 fw-bold">Fixtures</h1>
-                        <p class="col-md-8 fs-4">{{fixtures.league}}
+                        <h1 class="display-5 fw-bold">{{fixtures.league}}</h1>
+                        <p class="col-md-8 fs-4">Fixtures</p>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
 
                 <p>Fixtures for the {{fixtures.league}} league are listed below. Winners and their score have been highlighted</p>
                 <p>Please note that it can take up to a week from a game being played to its scoresheet being processed. 
-                    To see the total points awarded for these games, check the <a href="..standings/{{fixtures.league}}">standings page</a></p>
+                    To see the total points awarded for these games, check the <a href="../standings/{{fixtures.leagueURL}}">standings page</a></p>
                 <p class="mobileonly"> <em>This screen is not wide enough to display the full table, a simplified view has been rendered instead</em></p>
 
                 <div> <!-- Filter for the table -->

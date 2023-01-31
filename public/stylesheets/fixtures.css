@@ -121,10 +121,10 @@ body {
     filter: brightness(110%);
 }
 
-a:link { text-decoration: none; color: #000000;}
+/* a:link { text-decoration: none; color: #000000;}
 a:visited { text-decoration: none; color: #000000;}
 a:hover { text-decoration: none; color: #000000;}
-a:active { text-decoration: none; color: #000000;}
+a:active { text-decoration: none; color: #000000;} */
 
 #card-leaguetables{
     background-image: linear-gradient(to bottom right, #8FCB9B, #5b9279);
