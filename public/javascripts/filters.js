@@ -65,9 +65,11 @@ function showAll(elements){
 //When sorting, the symbols need to be updated to give visual feedback
 
 var sortIcons = {
-    "up":"bi bi-arrow-up",
-    "down":"bi bi-arrow-down",
+    "up":"bi bi-sort-numeric-up",
+    "down":"bi bi-sort-numeric-down",
     "none":"bi bi-arrow-down-up",
+    "upAZ":"bi bi-sort-alpha-up",
+    "downAZ":"bi bi-sort-alpha-down",
 }
 
 function setIcons(){
@@ -242,10 +244,10 @@ function sortTable_byName() {
 
     //Check what way we just sorted and set the icons
     if(dir == "desc"){
-        document.getElementById("teamSortIcon").className = sortIcons.up;
+        document.getElementById("teamSortIcon").className = sortIcons.upAZ;
     }
     else {
-        document.getElementById("teamSortIcon").className = sortIcons.down;
+        document.getElementById("teamSortIcon").className = sortIcons.downAZ;
     }
 }
 

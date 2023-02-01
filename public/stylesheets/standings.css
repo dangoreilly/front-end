@@ -36,6 +36,7 @@
 .bi {
     vertical-align: -.125em;
     fill: currentColor;
+    cursor: pointer;
 }
 
 .nav-scroller {
