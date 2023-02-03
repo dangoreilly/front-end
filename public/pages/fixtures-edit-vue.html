@@ -211,9 +211,9 @@
                         <tr 
                         v-for="(game, index) in games"
                         :class="{
-                            'table-danger ': game.deleted,
-                            'table-success': game.modified,
-                            'table-info': game.updated
+                            'table-info': game.updated,
+                            'table-danger ': game.deleted & !game.updated,
+                            'table-success': game.modified & !game.updated,
                         }"
                         >
                             <!-- ID -->
