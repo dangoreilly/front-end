@@ -440,7 +440,7 @@
                         <!-- Lot of code duplication, but the implication is slightly different, so it is neccessary -->
                         <tr 
                         v-for="(game, index) in games_new"
-                        class="table-warning",
+                        class="table-warning"
                         :class="{'table-info': game.updated}"
                         >
                             <!-- Valid yet? -->
@@ -464,7 +464,9 @@
                                 <input 
                                 class="form-control" 
                                 type="text" 
-                                v-model="game.time">
+                                v-model="game.time"
+                                style="max-width: 5rem;"
+                                > 
                             </td> 
 
                             <!-- Venue -->

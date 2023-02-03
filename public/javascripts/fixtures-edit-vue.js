@@ -273,6 +273,7 @@ var mainVueApp = {
             let newFixture = {
                 "ISO_date": null,
                 "venue": null,
+                "time": null,
                 "homeTeam": {
                     "clubName": null,
                     "teamName": null
