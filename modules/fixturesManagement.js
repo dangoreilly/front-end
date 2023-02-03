@@ -390,36 +390,40 @@ function calculatePoints(league){
 
         let currentGame = league.games[i]
 
-        // Get index of homeTeam
-        let homeTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.homeTeam.id)
-        // Get index of awayTeam
-        let awayTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.awayTeam.id)
+        //Make sure the fixture has actually been fulfilled before counting it
+        if (currentGame.posted){
 
-        // Increment homeTeam playCount
-        returnLeagueObject.teams[homeTeamIndex].played += 1;
-        // Increment awayTeam playCount
-        returnLeagueObject.teams[awayTeamIndex].played += 1;
+            // Get index of homeTeam
+            let homeTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.homeTeam.id)
+            // Get index of awayTeam
+            let awayTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.awayTeam.id)
 
-        // Check if this is a homeWin
-        if (currentGame.homeWin){
-            // increment homeTeam winCount
-            returnLeagueObject.teams[homeTeamIndex].won += 1;
-            // increment awayTeam lossCount
-            returnLeagueObject.teams[awayTeamIndex].lost += 1;
+            // Increment homeTeam playCount
+            returnLeagueObject.teams[homeTeamIndex].played += 1;
+            // Increment awayTeam playCount
+            returnLeagueObject.teams[awayTeamIndex].played += 1;
+
+            // Check if this is a homeWin
+            if (currentGame.homeWin){
+                // increment homeTeam winCount
+                returnLeagueObject.teams[homeTeamIndex].won += 1;
+                // increment awayTeam lossCount
+                returnLeagueObject.teams[awayTeamIndex].lost += 1;
+            }
+            else{ 
+                // increment homeTeam lossCount
+                returnLeagueObject.teams[homeTeamIndex].lost += 1;
+                // increment awayTeam winCount
+                returnLeagueObject.teams[awayTeamIndex].win += 1;
+            } 
+                
+            
+                
+            // Add homePoints to homeTeam points
+            returnLeagueObject.teams[homeTeamIndex].points += currentGame.homePoints;
+            // Add awayPoints to awayTeam points
+            returnLeagueObject.teams[homeTeamIndex].points += currentGame.awayPoints;
         }
-        else{ 
-            // increment homeTeam lossCount
-            returnLeagueObject.teams[homeTeamIndex].lost += 1;
-            // increment awayTeam winCount
-            returnLeagueObject.teams[awayTeamIndex].win += 1;
-        } 
-            
-        
-            
-        // Add homePoints to homeTeam points
-        returnLeagueObject.teams[homeTeamIndex].points += currentGame.homePoints;
-        // Add awayPoints to awayTeam points
-        returnLeagueObject.teams[homeTeamIndex].points += currentGame.awayPoints;
 
     }
 
