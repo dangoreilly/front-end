@@ -81,7 +81,7 @@
                             <h3 class="fs-2">Girls Juvenile</h3>
                             <div class="list-group">
                                 {{#leagues.girlsJuvenile}}
-                                <a href="/{{url}}/" class="list-group-item list-group-item-action">{{leagueName}}</a>
+                                <a href="/fixtures/{{url}}/" class="list-group-item list-group-item-action">{{leagueName}}</a>
                                 {{/leagues.girlsJuvenile}}
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                             <h3 class="fs-2">Boys Juvenile</h3>
                             <div class="list-group">
                                 {{#leagues.boysJuvenile}}
-                                <a href="/{{url}}/" class="list-group-item list-group-item-action">{{leagueName}}</a>
+                                <a href="/fixtures/{{url}}/" class="list-group-item list-group-item-action">{{leagueName}}</a>
                                 {{/leagues.boysJuvenile}}
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                             <h3 class="fs-2">Senior</h3>
                             <div class="list-group">
                                 {{#leagues.senior}}
-                                <a href="/{{url}}/" class="list-group-item list-group-item-action">{{leagueName}}</a>
+                                <a href="/fixtures/{{url}}/" class="list-group-item list-group-item-action">{{leagueName}}</a>
                                 {{/leagues.senior}}
                             </div>
                         </div>

@@ -89,7 +89,7 @@
 
                 <!-- <p>Standings for the {{standings.league}} league are listed below. The current <i>Top Four</i> have been highlighted. </p> -->
                 <p>Please note that it can take up to a week from a game being played to its scoresheet being processed. 
-                    To see a list of all processed games for this league, check the <a href="../fixtures/{{standings.leagueURL}}">fixtures page</a>
+                    To see a list of all processed games for this league, check the <a href="/fixtures/{{standings.leagueURL}}">fixtures page</a>
                 </p>
                 
 
