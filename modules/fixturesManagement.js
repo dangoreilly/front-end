@@ -300,6 +300,7 @@ async function getFixtures(leagueURL){
                         //       let parts =this.date.split("/");
                         //       return `${parts[2]}-${parts[1]}-${parts[0]}`
                         // },
+                        "time": attribs.venue || "",
                         "venue": attribs.venue || "",
                         "publicNote": attribs.publicNote || "",
                         "publicNoteExists": attribs.publicNote != "",

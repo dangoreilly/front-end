@@ -92,7 +92,7 @@
 
                 <p>Fixtures for the {{fixtures.league}} league are listed below. Winners and their score have been highlighted</p>
                 <p>Please note that it can take up to a week from a game being played to its scoresheet being processed. 
-                    To see the total points awarded for these games, check the <a href="../standings/{{fixtures.leagueURL}}">standings page</a></p>
+                    To see the total points awarded for these games, check the <a href="/standings/{{fixtures.leagueURL}}">standings page</a></p>
                 <p class="mobileonly"> <em>This screen is not wide enough to display the full table, a simplified view has been rendered instead</em></p>
 
                 <div> <!-- Filter for the table -->
@@ -126,6 +126,7 @@
                     <thead class="table-dark">
                         <tr>
                         <th scope="col">Date</th>
+                        <th scope="col" class="nomobile">Time</th>
                         <th scope="col" class="nomobile">Venue</th>
                         <th scope="col">Home</th>
                         <th scope="col">Score</th>
@@ -138,6 +139,7 @@
                         {{#fixtures.games}}
                         <tr {{^posted}}class="table-secondary"{{/posted}}>
                             <td>{{date}}</td>
+                            <td class="nomobile">{{time}}</td>
                             <td class="nomobile">{{venue}}</td>
                             {{!-- Is this a posted score? In that case format it --}}
                             {{#posted}}

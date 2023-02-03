@@ -232,6 +232,7 @@ var mainVueApp = {
 
             if(game.ISO_date != gc[index].ISO_date) return true;
             if(game.venue != gc[index].venue) return true;
+            if(game.time != gc[index].time) return true;
             if(game.publicNote != gc[index].publicNote) return true;
             if(game.homeTeam.teamName != gc[index].homeTeam.teamName) return true;
             if(game.homeScore != gc[index].homeScore) return true;
@@ -486,6 +487,7 @@ var mainVueApp = {
                 "data": {
                     "Date": f.ISO_date,
                     "venue": f.venue,
+                    "time": f.time,
                     "homeTeamScore": f.homeScore,
                     "awayTeamScore": f.awayScore,
                     "awayTeamPointsAwarded": f.awayPoints,
