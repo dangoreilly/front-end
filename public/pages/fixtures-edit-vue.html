@@ -80,25 +80,25 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text">Currently editing: </span>
                     <select 
-                                    id="leagueSelect"
-                                    class="form-select form-select-sm" 
-                                    aria-label="Team Select" 
-                                    v-model="selectedLeague"
-                                    @change="reconcileLeague()"
-                                    :disabled="changesMade"
-                                    :title="changesMade ? 'You need to reset or submit your changes before changing league' : ''"
-                                    > <!-- v-model="currentLeague.leagueName" -->
-                                        <option 
-                                        v-for="lg in leagues"
-                                        >
-                                            {{lg.leagueName}}
-                                        </option>
-                                    </select>
+                    id="leagueSelect"
+                    class="form-select form-select-sm" 
+                    aria-label="Team Select" 
+                    v-model="selectedLeague"
+                    @change="reconcileLeague()"
+                    :disabled="changesMade"
+                    :title="changesMade ? 'You need to reset or submit your changes before changing league' : ''"
+                    > <!-- v-model="currentLeague.leagueName" -->
+                        <option 
+                        v-for="lg in leagues"
+                        >
+                            {{lg.leagueName}}
+                        </option>
+                    </select>
                 </div>
 
 
                 <!-- Instructions -->
-                <div class="container-md mb-2 p-2 bg-secondary text-bg-secondary border-2 border-dark">
+                <div class="container mb-2 p-2 bg-secondary text-bg-secondary border-2 border-dark" id="mainDiv">
                     <div class="row">
                         <!-- Highlighting rules -->
                         <div class="col">
