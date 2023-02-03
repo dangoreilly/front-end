@@ -15,9 +15,10 @@ router.get('/google/redirect', function(req, res) {
     // console.log(`access_token: ${req.query.access_token}`)
 
     // This is then used to get the user profile from Strapi, if one exists
-    // console.log("Getting", strapi_google_path + "?access_token=" + req.query.access_token)
+    console.log("Getting", strapi_google_path + "?access_token=" + req.query.access_token)
     axios
-    .get(strapi_google_path + "?access_token=" + req.query.access_token)
+    .get(strapi_google_path + "?access_token=" + req.query.access_token,
+        {headers: { "Accept-Encoding": "gzip,deflate,compress", "Accept": "*/*"} })
     .then(response => {
         // If the user logs in, give them a cookie and send them back to the fixtures edit
         if (response.data.jwt){

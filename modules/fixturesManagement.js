@@ -10,7 +10,8 @@ async function getLeagues(){
 
     try{
           // Use the requestAddress to get team list from CMS
-          var response = await axios.get(requestAddress);
+          var response = await axios.get(requestAddress,
+            {headers: { "Accept-Encoding": "gzip,deflate,compress" } });
 
           // Set up empty array to hold the processed teams
           // We want to transform the data from the CMS to make it a bit cleaner first
@@ -203,7 +204,8 @@ async function getTeams(leagueURL){
 
       try{
             // Use the requestAddress to get team list from CMS
-            var response = await axios.get(requestAddress);
+            var response = await axios.get(requestAddress,
+                {headers: { "Accept-Encoding": "gzip,deflate,compress" } });
 
             // Set up empty array to hold the processed teams
             // We want to transform the data from the CMS to make it a bit cleaner first
@@ -266,7 +268,8 @@ async function getFixtures(leagueURL){
 
       try{
             // Use the requestAddress to get fixtures list from CMS
-            var response = await axios.get(requestAddress);
+            var response = await axios.get(requestAddress,
+                {headers: { "Accept-Encoding": "gzip,deflate,compress" } });
             
             // Set up empty array to hold the processed fixtures
             // We want to transform the data from the CMS to make it a bit cleaner first
