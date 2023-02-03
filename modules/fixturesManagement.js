@@ -182,12 +182,17 @@ function getClubForTeam(searchTeam, teams){
 
 
 function parseDate(_date){
-      //Takes in a date string in the format YYYY-MM-DD
-      //Returns date string in the format DD/MM/YYYY
+    //Takes in a date string in the format YYYY-MM-DD
+    //Returns date string in the format DD/MM/YYYY
+    //Unless date is sentry date
 
-      let parts =_date.split("-");
-      
-      return `${parts[2]}/${parts[1]}/${parts[0]}`
+    let parts =_date.split("-");
+
+    if (parts[0] == 1900){
+        return "TBC"
+    }
+    
+    return `${parts[2]}/${parts[1]}/${parts[0]}`
 
 }
 

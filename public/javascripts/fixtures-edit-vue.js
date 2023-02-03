@@ -366,6 +366,7 @@ var mainVueApp = {
                 if (deletedGames[i].ok){
                     console.log(`Deleted Fixture ${toBeDeleted[i].id}`);
                     deleted++;
+                    toBeDeleted[i].updated = true;
                 }
                 else {
                     // If a fixture fails to be deleted, throw an alert to the user with the 
@@ -419,6 +420,7 @@ var mainVueApp = {
                 
                 if (ModifedGames[i].ok){
                     console.log(`Updated Fixture ${ModifedGames[i].id}`);
+                    toBeModified[i].updated = true;
                     Modifed++;
                 }
                 else {
@@ -463,6 +465,7 @@ var mainVueApp = {
                 
                 if (uploadedFixtures[i].ok){
                     uploaded++;
+                    games_new[i].updated = true;
                     console.log(`Uploaded New Fixture ${i}`);
                 }
                 else {

@@ -117,6 +117,7 @@
                         <!-- What the buttons do -->
                         <div class="col">
                             <p>"Date", "Home Team" and "Away Team" are mandatory fields</p>
+                            <p>If the date is TBC, enter is as 01/01/1900. It will display as "TBC" on the public page</p>
                             <p>All other fields are optional.</p>
                             <p>All updates (additions, modifications, deletions) are sent when the "Update" button is clicked</p>
                         </div>
@@ -211,7 +212,8 @@
                         v-for="(game, index) in games"
                         :class="{
                             'table-danger ': game.deleted,
-                            'table-success': game.modified
+                            'table-success': game.modified,
+                            'table-info': game.updated
                         }"
                         >
                             <!-- ID -->
@@ -438,7 +440,8 @@
                         <!-- Lot of code duplication, but the implication is slightly different, so it is neccessary -->
                         <tr 
                         v-for="(game, index) in games_new"
-                        class="table-warning"
+                        class="table-warning",
+                        :class="{'table-info': game.updated}"
                         >
                             <!-- Valid yet? -->
                             <td>
