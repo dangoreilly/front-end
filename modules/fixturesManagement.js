@@ -393,6 +393,7 @@ function calculatePoints(league){
 
     // Loop through all the games
     for(i = 0; i < league.games.length; i++){
+        console.log(`Checking game ${i}/${league.games.length}`)
 
         let currentGame = league.games[i]
 
@@ -434,17 +435,18 @@ function calculatePoints(league){
     }
 
     //return the object with team stats
+    console.log(returnLeagueObject);
     return returnLeagueObject;
 
 }
 
 function getTeamIndexFromID(teams, id){
     // Takes in an array of team objects and an id
-    // Returns the index of the team with the corresponding index
+    // Returns the index of the team with the corresponding iSndex
 
-    for (i = 0; i < teams.length; i++){
+    for (j = 0; j < teams.length; j++){
 
-        if (teams[i].teamID == id) return i;
+        if (teams[j].teamID == id) return j;
 
     }
 
