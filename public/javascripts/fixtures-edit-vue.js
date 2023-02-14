@@ -117,7 +117,7 @@ var mainVueApp = {
             let data = await (await fetch(this.leagueURL)).json()
             //Now that we have the data, parse it
             // console.log(data);
-            this.league = data.league;
+            this.currentLeague = data.league;
             this.games = data.games;
             this.games_clean = JSON.parse(JSON.stringify(data.games)); // For later comparisons for UI highlighting, deep copying is needed
             this.leagueID = data.id;
@@ -131,8 +131,8 @@ var mainVueApp = {
             this.leagues = data.leagues;
             // console.log(this.leagues)
             // Initialise the first currentLeague
-            this.currentLeague = this.leagues[0]; 
-            this.selectedLeague = this.currentLeague.leagueName;
+            this.currentLeague = JSON.parse(JSON.stringify(this.leagues[0])); 
+            this.selectedLeague = JSON.parse(JSON.stringify(this.currentLeague.leagueName));
             this.fetchLeagueData();
         },
 
@@ -169,6 +169,7 @@ var mainVueApp = {
             });
 
             this.fetchLeagueData();
+            console.log("League update updated to ")
 
         },
 
