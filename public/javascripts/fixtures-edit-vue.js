@@ -329,8 +329,8 @@ var mainVueApp = {
             // Report to the user
             window.alert("Fixtures updated");
             // Refresh the UI
+            await this.fetchLeagueData();
             this.resetAll();
-            this.fetchLeagueData();
             // console.log(this.strapi_cookie);
             // console.log("sendUpdates()");
 

@@ -182,6 +182,10 @@
                         {{/fixtures.games}}
                     </tbody>
                 </table>
+
+                <p>To see the most recent results that haven't been processed by the Fixtures Secretary yet, see the <a href="https://docs.google.com/spreadsheets/u/3/d/e/2PACX-1vQQQG2HkYswteMR1TnnmOHQ1VUKdtPNBu9Y7h4On2BGgQWXVNjcm1gcJtH4M_AgvaVPdOg3tf9VEpj7/pubhtml?gid=1227565498&single=true">full list of scoresheets submitted by clubs.</a>
+                Be aware that scores as submitted can sometimes contain inaccuracies or lack information, eg where a game is forfeit due to too few players.</p>
+
             </div>
 
             <div class="modal fade" id="noteModal" tabindex="-1" aria-hidden="true" >
