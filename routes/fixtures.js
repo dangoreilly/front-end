@@ -160,6 +160,10 @@ router.get('/edit/', function(req, res) {
             if (req.cookies.nebb_jwt_token){
                   user_jwt = req.cookies.nebb_jwt_token;
             }
+            else if (process.env.AUTH_JWT_OVERRIDE){
+                console.log("Bypassing google auth for development")
+                res.cookie("nebb_jwt_token", process.env.AUTH_JWT_OVERRIDE);
+            }
             else {
                   //If they don't have a cookie, then send them to strapi for login
                   console.log(`Redirecting to ${process.env.STRAPI + "/api/connect/google"}`)
