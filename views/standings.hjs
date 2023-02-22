@@ -133,7 +133,7 @@
     
     <script>
         // Sort the table alphabetically as soon as the page loads
-        document.getElementById("standingsTable").onload = sortTable_byName();        
+        document.getElementById("standingsTable").onload = sortTable_byPoints();        
     </script>
   
   </body>
