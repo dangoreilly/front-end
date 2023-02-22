@@ -117,7 +117,7 @@ var mainVueApp = {
             let data = await (await fetch(this.leagueURL)).json()
             //Now that we have the data, parse it
             // console.log(data);
-            this.currentLeague = data.league;
+            // this.currentLeague = data.league;
             this.games = data.games;
             this.games_clean = JSON.parse(JSON.stringify(data.games)); // For later comparisons for UI highlighting, deep copying is needed
             this.leagueID = data.id;
@@ -165,11 +165,12 @@ var mainVueApp = {
                 if (lg.leagueName == this.selectedLeague){
                     // Deep copy league
                     this.currentLeague = JSON.parse(JSON.stringify(lg))
+                    console.log(lg);
                 } 
             });
 
             this.fetchLeagueData();
-            console.log("League update updated to ")
+            // console.log("League updated to ")
 
         },
 
@@ -326,10 +327,10 @@ var mainVueApp = {
             await this.PUTupdatedFixtures();
             // Send DELETE request
             await this.deleteFixturesFromServer();
-            // Report to the user
-            window.alert("Fixtures updated");
             // Refresh the UI
             await this.fetchLeagueData();
+            // Report to the user
+            window.alert("Fixtures updated");
             this.resetAll();
             // console.log(this.strapi_cookie);
             // console.log("sendUpdates()");
