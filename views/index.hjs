@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTPvTXumJHBHY7c5MN8J6wwGsX2n3aNW9MZoWWpMl7wz1cQi0-7UuB5b-Oz1KAfyg/pubhtml">
+                        <a href="/standings">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
                                     <i class="bi bi-trophy-fill"></i>
@@ -90,7 +90,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col">
+                    {{!-- <div class="col">
                         <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQQQG2HkYswteMR1TnnmOHQ1VUKdtPNBu9Y7h4On2BGgQWXVNjcm1gcJtH4M_AgvaVPdOg3tf9VEpj7/pubhtml?gid=1227565498&single=true">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
@@ -100,15 +100,15 @@
                                 <p>Game results for our Juvenile and Senior leagues</p>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
                     <div class="col">
-                        <a href="https://docs.google.com/spreadsheets/u/3/d/e/2PACX-1vRBWA3TdlcVPpLDK5NH9VU_HkcqyU8xQhv_3bfL6J1WbN43PLzRZLkLyvt6K5lavw/pubhtml">
+                        <a href="/fixtures">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-fixtures">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
                                     <i class="bi bi-trophy-fill"></i>
                                 </div>
                                 <h3 class="fs-2">Fixtures</h3>
-                                <p>Fixtures Spreadsheet for the 22/23 season</p>
+                                <p>Upcoming fixtures for our Juvenile and Senior Leagues and the results from the current season</p>
                             </div>
                         </a>
                     </div>
