@@ -393,7 +393,7 @@ function calculatePoints(league){
 
     // Loop through all the games
     for(i = 0; i < league.games.length; i++){
-        console.log(`Checking game ${i}/${league.games.length}`)
+        console.log(`Checking game ${i+1}/${league.games.length}`)
 
         let currentGame = league.games[i]
 
@@ -402,34 +402,56 @@ function calculatePoints(league){
 
             // Get index of homeTeam
             let homeTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.homeTeam.id)
+            let homeTeamName = returnLeagueObject.teams[homeTeamIndex].team.slice()
             // Get index of awayTeam
             let awayTeamIndex = getTeamIndexFromID(returnLeagueObject.teams, currentGame.awayTeam.id)
+            let awayTeamName = returnLeagueObject.teams[awayTeamIndex].team.slice()
 
-            // Increment homeTeam playCount
-            returnLeagueObject.teams[homeTeamIndex].played += 1;
-            // Increment awayTeam playCount
-            returnLeagueObject.teams[awayTeamIndex].played += 1;
+            // Only continue processing if both teams can be found
+            if (homeTeamIndex < 0 || homeTeamIndex < 0){
 
-            // Check if this is a homeWin
-            if (currentGame.homeWin){
-                // increment homeTeam winCount
-                returnLeagueObject.teams[homeTeamIndex].won += 1;
-                // increment awayTeam lossCount
-                returnLeagueObject.teams[awayTeamIndex].lost += 1;
+                console.log("This fixture is broken. Processing ceased")
             }
-            else{ 
-                // increment homeTeam lossCount
-                returnLeagueObject.teams[homeTeamIndex].lost += 1;
-                // increment awayTeam winCount
-                returnLeagueObject.teams[awayTeamIndex].win += 1;
-            } 
+            else {
+
+                // Increment homeTeam playCount
+                returnLeagueObject.teams[homeTeamIndex].played += 1;
+                // Increment awayTeam playCount
+                returnLeagueObject.teams[awayTeamIndex].played += 1;
+
+                // console.log(`${homeTeamName} Plays -> ${returnLeagueObject.teams[homeTeamIndex].played} (+1)`)
+                // console.log(`${awayTeamName} Plays -> ${returnLeagueObject.teams[awayTeamIndex].played} (+1)`)
+
+                // Check if this is a homeWin
+                if (currentGame.homeWin){
+                    // increment homeTeam winCount
+                    returnLeagueObject.teams[homeTeamIndex].won += 1;
+                    // increment awayTeam lossCount
+                    returnLeagueObject.teams[awayTeamIndex].lost += 1;
+
+                    // console.log(`${homeTeamName} Wins -> ${returnLeagueObject.teams[homeTeamIndex].won} (+1)`)
+                    // console.log(`${awayTeamName} Losses -> ${returnLeagueObject.teams[awayTeamIndex].lost} (+1)`)
+                }
+                else{ 
+                    // increment homeTeam lossCount
+                    returnLeagueObject.teams[homeTeamIndex].lost += 1;
+                    // increment awayTeam winCount
+                    returnLeagueObject.teams[awayTeamIndex].won += 1;
+
+                    // console.log(`${awayTeamName} Wins -> ${returnLeagueObject.teams[awayTeamIndex].won} (+1)`)
+                    // console.log(`${homeTeamName} Losses -> ${returnLeagueObject.teams[homeTeamIndex].lost} (+1)`)
+                } 
+                    
                 
-            
-                
-            // Add homePoints to homeTeam points
-            returnLeagueObject.teams[homeTeamIndex].points += currentGame.homePoints;
-            // Add awayPoints to awayTeam points
-            returnLeagueObject.teams[homeTeamIndex].points += currentGame.awayPoints;
+                    
+                // Add homePoints to homeTeam points
+                returnLeagueObject.teams[homeTeamIndex].points += currentGame.homePoints;
+                // Add awayPoints to awayTeam points
+                returnLeagueObject.teams[awayTeamIndex].points += currentGame.awayPoints;
+
+                // console.log(`${homeTeamName} Points -> ${returnLeagueObject.teams[homeTeamIndex].points} (+${currentGame.homePoints})`)
+                // console.log(`${awayTeamName} Points -> ${returnLeagueObject.teams[awayTeamIndex].points} (+${currentGame.awayPoints})`)
+            }
         }
 
     }
