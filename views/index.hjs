@@ -80,7 +80,8 @@
                         </div>
                     </div>
                     <div class="col">
-                        <a href="/standings">
+                        {{!-- <a href="/standings"> --}}
+                        <a href="https://docs.google.com/spreadsheets/d/1BOWachyQLAWXKYoSjo-JqJXqJ_40JRDw/edit?usp=share_link&ouid=117946471706725330498&rtpof=true&sd=true">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-leaguetables">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
                                     <i class="bi bi-trophy-fill"></i>
@@ -102,7 +103,8 @@
                         </a>
                     </div> --}}
                     <div class="col">
-                        <a href="/fixtures">
+                        {{!-- <a href="/fixtures"> --}}
+                        <a href="https://docs.google.com/spreadsheets/d/1h291MtAS4jQ5ynhxHVifgI3wWUXDm5mK/edit?usp=share_link&ouid=117946471706725330498&rtpof=true&sd=true">
                             <div class="h-100 p-5 bg-light border rounded-4 homepage-card" id="card-fixtures">
                                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3">
                                     <i class="bi bi-trophy-fill"></i>
